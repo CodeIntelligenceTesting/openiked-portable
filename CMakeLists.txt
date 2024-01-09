@@ -12,9 +12,12 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.16)
 
 project(openiked)
+
+find_package(cifuzz NO_SYSTEM_ENVIRONMENT_PATH)
+enable_fuzz_testing()
 
 include(CheckFunctionExists)
 include(CheckLibraryExists)
@@ -418,3 +421,5 @@ add_subdirectory(ikectl)
 add_subdirectory(regress/dh)
 add_subdirectory(regress/parser)
 add_subdirectory(regress/test_helper)
+
+add_subdirectory(regress/parser-libfuzzer)

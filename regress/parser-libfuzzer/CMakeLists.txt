@@ -45,3 +45,11 @@ endif()
 
 target_compile_options(test_libfuzzer PRIVATE ${CFLAGS})
 
+# add cifuzz fuzz target
+add_fuzz_test(test_cifuzz test_cifuzz.c common.c)
+target_include_directories(test_cifuzz
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../iked
+)
+target_link_libraries(test_cifuzz
+	PRIVATE event crypto ssl compat iked-shared
+)

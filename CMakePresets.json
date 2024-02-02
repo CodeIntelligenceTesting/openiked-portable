@@ -1,0 +1,414 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "clangd",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "hidden": true
+    },
+    {
+      "name": "vcpkg",
+      "cacheVariables": {
+        "VCPKG_INSTALL_OPTIONS": "--debug;--allow-unsupported",
+        "VCPKG_VERBOSE": "ON",
+        "VCPKG_APPLOCAL_DEPS": "OFF"
+      },
+      "toolchainFile": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "hidden": true
+    },
+    {
+      "name": "debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "hidden": true
+    },
+    {
+      "name": "release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      },
+      "hidden": true
+    },
+    {
+      "name": "make",
+      "generator": "Unix Makefiles",
+      "hidden": true
+    },
+    {
+      "name": "ninja",
+      "generator": "Ninja",
+      "hidden": true
+    },
+    {
+      "name": "ninjamulti",
+      "generator": "Ninja Multi-Config",
+      "hidden": true
+    },
+    {
+      "name": "vs2022",
+      "generator": "Visual Studio 17 2022",
+      "hidden": true
+    },
+    
+    {
+      "name": "freebsd",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "FreeBSD"
+      },
+      "hidden": true
+    },
+    {
+      "name": "linux",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "hidden": true
+    },
+    {
+      "name": "windows",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "hidden": true
+    },
+    {
+      "name": "x64-freebsd",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-freebsd"
+      },
+      "hidden": true,
+      "inherits": ["freebsd"]
+    },
+    {
+      "name": "x64-linux",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-linux"
+      },
+      "hidden": true,
+      "inherits": ["linux"]
+    },
+    {
+      "name": "x64-windows",
+      "architecture": "x64",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
+      },
+      "hidden": true,
+      "inherits": ["windows"]
+    },
+    {
+      "name": "base",
+      "binaryDir": "${sourceDir}/build",
+      "hidden": true
+    },
+    {
+      "name": "ubuntu-llvm-14",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang-14",
+        "CMAKE_CXX_COMPILER": "clang++-14",
+        "LLVM_COV_COMMAND": "llvm-cov-14",
+        "LLVM_PROFDATA_COMMAND": "llvm-profdata-14"
+      },
+      "hidden": true
+    },
+    {
+      "name": "ubuntu-llvm-15",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang-15",
+        "CMAKE_CXX_COMPILER": "clang++-15",
+        "LLVM_COV_COMMAND": "llvm-cov-15",
+        "LLVM_PROFDATA_COMMAND": "llvm-profdata-15"
+      },
+      "hidden": true
+    },
+    {
+      "name": "freebsd-llvm-base",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "LLVM_COV_COMMAND": "llvm-cov",
+        "LLVM_PROFDATA_COMMAND": "llvm-profdata"
+      },
+      "hidden": true
+    },
+    {
+      "name": "freebsd-llvm-17",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang17",
+        "CMAKE_CXX_COMPILER": "clang++17",
+        "LLVM_COV_COMMAND": "llvm-cov17",
+        "LLVM_PROFDATA_COMMAND": "llvm-profdata17"
+      },
+      "hidden": true
+    },
+    {
+      "name": "ci-base",
+      "inherits": ["base"],
+      "cacheVariables": {
+        "FUZZER_RUN_JOBS": "0",
+        "FUZZER_RUN_WORKERS": "0",
+        "FUZZER_RUN_TIME_IN_SECONDS": "300",
+        "ASAN": "On",
+        "CLUSTERFUZZ": "On"
+      },
+      "hidden": true
+    },
+    {
+      "name": "coverage",
+      "cacheVariables": {
+        "COVERAGE_REPORT": "On"
+      },
+      "hidden": true
+    },
+    
+    {
+      "name": "gh-ubuntu22.04-llvm14-debug",
+      "inherits": [ "ci-base", "make", "x64-linux", "ubuntu-llvm-14", "debug", "coverage" ]
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm14-release",
+      "inherits": [ "ci-base", "make", "x64-linux", "ubuntu-llvm-14", "release" ]
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm15-debug",
+      "inherits": [ "ci-base", "make", "x64-linux", "ubuntu-llvm-15", "debug", "coverage" ]
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm15-release",
+      "inherits": [ "ci-base", "make", "x64-linux", "ubuntu-llvm-15", "release" ]
+    },
+    {
+      "name": "ci-make-x64-linux-debug",
+      "inherits": [ "ci-base", "make", "x64-linux", "debug", "coverage" ]
+    },
+    {
+      "name": "ci-make-x64-linux-release",
+      "inherits": [ "ci-base", "make", "x64-linux", "release" ]
+    },
+    {
+      "name": "ci-make-x64-freebsd-debug",
+      "inherits": [ "ci-base", "make", "x64-freebsd", "debug" ]
+    },
+    {
+      "name": "ci-make-x64-freebsd-release",
+      "inherits": [ "ci-base", "make", "x64-freebsd", "release" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-debug",
+      "inherits": [ "ci-base", "vs2022", "x64-windows", "debug" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-release",
+      "inherits": [ "ci-base", "vs2022", "x64-windows", "release" ]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "freebsd",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "FreeBSD"
+      },
+      "hidden": true
+    },
+    {
+      "name": "linux",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "hidden": true
+    },
+    {
+      "name": "windows",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "hidden": true
+    },
+    {
+      "name": "debug",
+      "configurePreset": "debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "configuration": "Release"
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm14-debug",
+      "configurePreset": "gh-ubuntu22.04-llvm14-debug",
+      "configuration": "Debug",
+      "inherits": [ "linux" ]
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm14-release",
+      "configurePreset": "gh-ubuntu22.04-llvm14-release",
+      "configuration": "Release",
+      "inherits": [ "linux" ]
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm15-debug",
+      "configurePreset": "gh-ubuntu22.04-llvm15-debug",
+      "configuration": "Debug",
+      "inherits": [ "linux" ]
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm15-release",
+      "configurePreset": "gh-ubuntu22.04-llvm15-release",
+      "configuration": "Release",
+      "inherits": [ "linux" ]
+    },
+    {
+      "name": "ci-make-x64-freebsd-debug",
+      "configurePreset": "ci-make-x64-freebsd-debug",
+      "configuration": "Debug",
+      "inherits": [ "freebsd" ]
+    },
+    {
+      "name": "ci-make-x64-freebsd-release",
+      "configurePreset": "ci-make-x64-freebsd-release",
+      "configuration": "Release",
+      "inherits": [ "freebsd" ]
+    },
+    {
+      "name": "ci-make-x64-linux-debug",
+      "configurePreset": "ci-make-x64-linux-debug",
+      "configuration": "Debug",
+      "inherits": [ "linux" ]
+    },
+    {
+      "name": "ci-make-x64-linux-release",
+      "configurePreset": "ci-make-x64-linux-release",
+      "configuration": "Release",
+      "inherits": [ "linux" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-debug",
+      "configurePreset": "ci-vs2022-x64-windows-debug",
+      "configuration": "Debug",
+      "inherits": [ "windows" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-release",
+      "configurePreset": "ci-vs2022-x64-windows-release",
+      "configuration": "Release",
+      "inherits": [ "windows" ]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "debug",
+      "configurePreset": "debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "configuration": "Release"
+    },
+    {
+      "name": "ci",
+      "output": {
+        "verbosity": "extra"
+      },
+      "hidden": true
+    },
+    {
+      "name": "freebsd",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "FreeBSD"
+      },
+      "hidden": true
+    },
+    {
+      "name": "linux",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "hidden": true
+    },
+    {
+      "name": "windows",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "hidden": true
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm14-debug",
+      "configurePreset": "gh-ubuntu22.04-llvm14-debug",
+      "inherits": [ "ci", "linux", "debug" ]
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm14-release",
+      "configurePreset": "gh-ubuntu22.04-llvm14-release",
+      "inherits": [ "ci", "linux", "release" ]
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm15-debug",
+      "configurePreset": "gh-ubuntu22.04-llvm15-debug",
+      "inherits": [ "ci", "linux", "debug" ]
+    },
+    {
+      "name": "gh-ubuntu22.04-llvm15-release",
+      "configurePreset": "gh-ubuntu22.04-llvm15-release",
+      "inherits": [ "ci", "linux", "release" ]
+    },
+    {
+      "name": "ci-make-x64-freebsd-debug",
+      "configurePreset": "ci-make-x64-freebsd-debug",
+      "inherits": [ "ci", "freebsd", "debug" ]
+    },
+    {
+      "name": "ci-make-x64-freebsd-release",
+      "configurePreset": "ci-make-x64-freebsd-release",
+      "inherits": [ "ci", "freebsd", "release" ]
+    },
+    {
+      "name": "ci-make-x64-linux-debug",
+      "configurePreset": "ci-make-x64-linux-debug",
+      "inherits": [ "ci", "linux", "debug" ]
+    },
+    {
+      "name": "ci-make-x64-linux-release",
+      "configurePreset": "ci-make-x64-linux-release",
+      "inherits": [ "ci", "linux", "release" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-debug",
+      "configurePreset": "ci-vs2022-x64-windows-debug",
+      "inherits": [ "ci", "windows", "debug" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-release",
+      "configurePreset": "ci-vs2022-x64-windows-release",
+      "inherits": [ "ci", "windows", "release" ]
+    }
+  ]
+}

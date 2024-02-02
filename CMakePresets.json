@@ -157,7 +157,7 @@
     },
     {
       "name": "ci-base",
-      "inherits": ["base"],
+      "inherits": ["base", "vcpkg"],
       "cacheVariables": {
         "FUZZER_RUN_JOBS": "0",
         "FUZZER_RUN_WORKERS": "0",

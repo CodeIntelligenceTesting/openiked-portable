@@ -90,6 +90,11 @@ if (NOT DEFINED CMAKE_INSTALL_SBINDIR)
 	set (CMAKE_INSTALL_SBINDIR ${CMAKE_INSTALL_PREFIX}/sbin)
 endif()
 
+if(DEFINED ENV{CLUSTERFUZZLITE})
+    set(OPENSSL_USE_STATIC_LIBS On)
+endif()
+find_package(OpenSSL REQUIRED)
+
 check_linker_flag(C "LINKER:-z,now,-z,relro" HAVE_LD_Z)
 
 check_include_files("sys/types.h;net/pfkeyv2.h" HAVE_NET_PFKEY_H)

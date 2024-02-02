@@ -30,13 +30,13 @@ target_include_directories(test_libfuzzer
 # when using clusterfuzz we need static linking and clusterfuzz' compiler arguments
 if (DEFINED ENV{CLUSTERFUZZLITE})
 	target_link_libraries(test_libfuzzer
-		"-lm -Wl,-Bstatic -lssl -lcrypto -levent" compat iked-shared $ENV{LIB_FUZZING_ENGINE}
+		"-lm -Wl,-Bstatic -levent" OpenSSL::SSL OpenSSL::Crypto compat iked-shared $ENV{LIB_FUZZING_ENGINE}
 	)
 else()
 	string(APPEND CMAKE_C_FLAGS " -fsanitize=fuzzer")
 	string(APPEND CMAKE_EXE_LINKER_FLAGS " -fsanitize=fuzzer")
 	target_link_libraries(test_libfuzzer
-		PRIVATE event crypto ssl compat iked-shared
+		PRIVATE event OpenSSL::SSL OpenSSL::Crypto compat iked-shared
 	)
 	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/corpus)
 	configure_file(run_test.sh run_test.sh COPYONLY)

@@ -16,6 +16,7 @@ include(CheckFunctionExists)
 include(CheckLibraryExists)
 include(CheckSymbolExists)
 include(CheckIncludeFiles)
+include(GNUInstallDirs)
 
 set(VERSIONED_FILES)
 list(APPEND VERSIONED_FILES iked.c)

@@ -91,8 +91,10 @@ if (NOT DEFINED CMAKE_INSTALL_SBINDIR)
 endif()
 
 if(DEFINED ENV{CLUSTERFUZZLITE})
+	set(LIBEVENT_STATIC_LINK On)
     set(OPENSSL_USE_STATIC_LIBS On)
 endif()
+find_package(Libevent REQUIRED)
 find_package(OpenSSL REQUIRED)
 
 check_linker_flag(C "LINKER:-z,now,-z,relro" HAVE_LD_Z)

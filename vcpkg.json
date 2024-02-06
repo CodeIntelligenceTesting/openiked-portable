@@ -4,6 +4,9 @@
   "dependencies": [
     {
       "name": "openssl"
+    },
+    {
+      "name": "libevent"
     }
   ]
 }

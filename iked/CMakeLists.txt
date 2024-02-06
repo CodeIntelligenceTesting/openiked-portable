@@ -115,11 +115,11 @@ target_include_directories(iked-shared PRIVATE ${INC_DIRS})
 
 if(DEFINED ENV{CLUSTERFUZZLITE})
 	target_link_libraries(iked-shared
-        	"-lm -Wl,-Bstatic -levent -Wl,-Bdynamic" OpenSSL::SSL OpenSSL::Crypto compat
+        	"-lm" libevent::core OpenSSL::SSL OpenSSL::Crypto compat
 	)
 else()
 	target_link_libraries(iked-shared
-		PRIVATE util event OpenSSL::SSL OpenSSL::Crypto compat
+		PRIVATE util libevent::core OpenSSL::SSL OpenSSL::Crypto compat
 	)
 endif()
 

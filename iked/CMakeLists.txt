@@ -44,6 +44,7 @@ list(APPEND CFLAGS
 )
 
 add_library(iked-shared STATIC
+	ikev2_msg.c
 	ikev2_pld.c
 	imsg_util.c
 	log.c
@@ -84,7 +85,6 @@ list(APPEND SRCS
 	iked.c
 	ikev2.c
 	ikev2.h
-	ikev2_msg.c
 	ocsp.c
 	policy.c
 	print.c

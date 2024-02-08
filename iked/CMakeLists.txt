@@ -53,6 +53,7 @@ add_library(iked-shared STATIC
 	log.c
 	policy.c
 	proc.c
+	timer.c
 	util.c
 	${CMAKE_CURRENT_BINARY_DIR}/ikev2_map.c
 	${CMAKE_CURRENT_BINARY_DIR}/eap_map.c
@@ -90,7 +91,6 @@ list(APPEND SRCS
 	ocsp.c
 	print.c
 	smult_curve25519_ref.c
-	timer.c
 	crypto_hash.c
 	sntrup761.c
 	# Generated files

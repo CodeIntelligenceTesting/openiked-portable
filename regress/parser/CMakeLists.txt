@@ -22,7 +22,6 @@ list(APPEND SRCS
 add_executable(test_parser ${SRCS})
 
 target_include_directories(test_parser
-	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../test_helper
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../iked
 )
 

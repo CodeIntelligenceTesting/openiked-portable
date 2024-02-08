@@ -48,7 +48,7 @@ set(INC_DIRS
 	${CMAKE_CURRENT_SOURCE_DIR}/../iked
 )
 
-add_library(iked-shared OBJECT
+add_library(iked-shared STATIC
 	ikev2_pld.c
 	imsg_util.c
 	log.c

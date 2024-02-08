@@ -44,6 +44,7 @@ list(APPEND CFLAGS
 )
 
 add_library(iked-shared STATIC
+	ca.c
 	control.c
 	config.c
 	crypto.c
@@ -86,7 +87,6 @@ if (WITH_APPARMOR)
 endif()
 
 list(APPEND SRCS
-	ca.c
 	chap_ms.c
 	eap.c
 	iked.c

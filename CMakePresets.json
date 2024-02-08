@@ -161,6 +161,11 @@
       "hidden": true
     },
     {
+      "name": "windows-llvm-base",
+      "toolset": "ClangCL",
+      "hidden": true
+    },
+    {
       "name": "ci-base",
       "inherits": ["base"],
       "cacheVariables": {
@@ -217,6 +222,14 @@
     {
       "name": "ci-vs2022-x64-windows-release",
       "inherits": [ "ci-base", "vs2022", "x64-windows", "release" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-llvm-debug",
+      "inherits": [ "ci-base", "vs2022", "x64-windows", "windows-llvm-base", "debug" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-llvm-release",
+      "inherits": [ "ci-base", "vs2022", "x64-windows", "windows-llvm-base", "release" ]
     }
   ],
   "buildPresets": [
@@ -316,6 +329,18 @@
       "configurePreset": "ci-vs2022-x64-windows-release",
       "configuration": "Release",
       "inherits": [ "windows" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-llvm-debug",
+      "configurePreset": "ci-vs2022-x64-windows-llvm-debug",
+      "configuration": "Debug",
+      "inherits": [ "windows" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-llvm-release",
+      "configurePreset": "ci-vs2022-x64-windows-llvm-release",
+      "configuration": "Release",
+      "inherits": [ "windows" ]
     }
   ],
   "testPresets": [
@@ -411,6 +436,16 @@
     {
       "name": "ci-vs2022-x64-windows-release",
       "configurePreset": "ci-vs2022-x64-windows-release",
+      "inherits": [ "ci", "windows", "release" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-llvm-debug",
+      "configurePreset": "ci-vs2022-x64-windows-llvm-debug",
+      "inherits": [ "ci", "windows", "debug" ]
+    },
+    {
+      "name": "ci-vs2022-x64-windows-llvm-release",
+      "configurePreset": "ci-vs2022-x64-windows-llvm-release",
       "inherits": [ "ci", "windows", "release" ]
     }
   ]

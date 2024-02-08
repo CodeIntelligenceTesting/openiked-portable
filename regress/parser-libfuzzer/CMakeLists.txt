@@ -23,10 +23,6 @@ list(APPEND SRCS
 set(CMAKE_C_COMPILER clang)
 add_executable(test_libfuzzer ${SRCS})
 
-target_include_directories(test_libfuzzer
-	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../iked
-)
-
 # when using clusterfuzz we need static linking and clusterfuzz' compiler arguments
 if (DEFINED ENV{CLUSTERFUZZLITE})
 	target_link_libraries(test_libfuzzer "-lm" iked-shared $ENV{LIB_FUZZING_ENGINE})

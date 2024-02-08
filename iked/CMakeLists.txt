@@ -43,11 +43,6 @@ list(APPEND CFLAGS
 	"$<$<CONFIG:DEBUG>:-O0;-g>"
 )
 
-set(INC_DIRS
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}/../iked
-)
-
 add_library(iked-shared STATIC
 	ikev2_pld.c
 	imsg_util.c
@@ -110,8 +105,7 @@ if(HAVE_LD_Z)
 	target_link_options(iked PRIVATE "LINKER:-z,relro,-z,now")
 endif()
 
-target_include_directories(iked PRIVATE ${INC_DIRS})
-target_include_directories(iked-shared PRIVATE ${INC_DIRS})
+target_include_directories(iked-shared PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(iked-shared PUBLIC libevent::core OpenSSL::SSL OpenSSL::Crypto compat)
 

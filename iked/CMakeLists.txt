@@ -52,6 +52,7 @@ add_library(iked-shared STATIC
 	imsg_util.c
 	log.c
 	policy.c
+	print.c
 	proc.c
 	timer.c
 	util.c
@@ -89,7 +90,6 @@ list(APPEND SRCS
 	iked.c
 	ikev2.h
 	ocsp.c
-	print.c
 	smult_curve25519_ref.c
 	crypto_hash.c
 	sntrup761.c

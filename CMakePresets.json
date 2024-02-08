@@ -113,6 +113,11 @@
     {
       "name": "base",
       "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "ASAN": "On",
+        "CLUSTERFUZZ": "On"
+      },
+      "inherits": ["vcpkg"],
       "hidden": true
     },
     {
@@ -157,13 +162,11 @@
     },
     {
       "name": "ci-base",
-      "inherits": ["base", "vcpkg"],
+      "inherits": ["base"],
       "cacheVariables": {
         "FUZZER_RUN_JOBS": "0",
         "FUZZER_RUN_WORKERS": "0",
-        "FUZZER_RUN_TIME_IN_SECONDS": "300",
-        "ASAN": "On",
-        "CLUSTERFUZZ": "On"
+        "FUZZER_RUN_TIME_IN_SECONDS": "300"
       },
       "hidden": true
     },

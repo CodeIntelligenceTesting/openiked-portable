@@ -57,8 +57,10 @@ add_library(iked-shared STATIC
 	proc.c
 	timer.c
 	util.c
+	# Generated files
 	${CMAKE_CURRENT_BINARY_DIR}/ikev2_map.c
 	${CMAKE_CURRENT_BINARY_DIR}/eap_map.c
+	${CMAKE_CURRENT_BINARY_DIR}/parse.c
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
@@ -93,8 +95,6 @@ list(APPEND SRCS
 	smult_curve25519_ref.c
 	crypto_hash.c
 	sntrup761.c
-	# Generated files
-	${CMAKE_CURRENT_BINARY_DIR}/parse.c
 )
 
 add_executable(iked ${SRCS})

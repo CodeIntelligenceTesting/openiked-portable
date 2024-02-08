@@ -56,6 +56,7 @@ add_library(iked-shared STATIC
 	ikev2_pld.c
 	imsg_util.c
 	log.c
+	ocsp.c
 	policy.c
 	print.c
 	proc.c
@@ -92,7 +93,6 @@ endif()
 list(APPEND SRCS
 	iked.c
 	ikev2.h
-	ocsp.c
 	crypto_hash.c
 	sntrup761.c
 )

@@ -49,6 +49,7 @@ add_library(iked-shared STATIC
 	control.c
 	config.c
 	crypto.c
+	crypto_hash.c
 	dh.c
 	eap.c
 	ikev2.c
@@ -94,7 +95,6 @@ endif()
 list(APPEND SRCS
 	iked.c
 	ikev2.h
-	crypto_hash.c
 )
 
 add_executable(iked ${SRCS})

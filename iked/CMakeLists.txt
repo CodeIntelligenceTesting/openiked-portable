@@ -125,7 +125,7 @@ endif()
 
 list(APPEND LIBS
 	util
-	event
+	libevent::core
 	OpenSSL::SSL
 	OpenSSL::Crypto
 	compat

@@ -49,6 +49,7 @@ add_library(iked-shared STATIC
 	config.c
 	crypto.c
 	dh.c
+	eap.c
 	ikev2.c
 	ikev2_msg.c
 	ikev2_pld.c
@@ -88,7 +89,6 @@ endif()
 
 list(APPEND SRCS
 	chap_ms.c
-	eap.c
 	iked.c
 	ikev2.h
 	ocsp.c

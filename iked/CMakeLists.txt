@@ -49,6 +49,7 @@ add_library(iked-shared STATIC
 	ikev2_pld.c
 	imsg_util.c
 	log.c
+	proc.c
 	util.c
 	${CMAKE_CURRENT_BINARY_DIR}/ikev2_map.c
 	${CMAKE_CURRENT_BINARY_DIR}/eap_map.c
@@ -88,7 +89,6 @@ list(APPEND SRCS
 	ocsp.c
 	policy.c
 	print.c
-	proc.c
 	smult_curve25519_ref.c
 	timer.c
 	crypto_hash.c

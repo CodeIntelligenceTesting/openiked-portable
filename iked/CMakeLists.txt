@@ -58,6 +58,7 @@ add_library(iked-shared STATIC
 	policy.c
 	print.c
 	proc.c
+	smult_curve25519_ref.c
 	timer.c
 	util.c
 	# Generated files
@@ -92,7 +93,6 @@ list(APPEND SRCS
 	iked.c
 	ikev2.h
 	ocsp.c
-	smult_curve25519_ref.c
 	crypto_hash.c
 	sntrup761.c
 )

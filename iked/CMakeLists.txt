@@ -113,24 +113,16 @@ endif()
 target_include_directories(iked PRIVATE ${INC_DIRS})
 target_include_directories(iked-shared PRIVATE ${INC_DIRS})
 
+target_link_libraries(iked-shared PRIVATE compat)
+target_link_libraries(iked-shared PUBLIC libevent::core OpenSSL::SSL OpenSSL::Crypto)
+
 if(DEFINED ENV{CLUSTERFUZZLITE})
-	target_link_libraries(iked-shared
-        	"-lm" libevent::core OpenSSL::SSL OpenSSL::Crypto compat
-	)
+	target_link_libraries(iked-shared PUBLIC "-lm")
 else()
-	target_link_libraries(iked-shared
-		PRIVATE util libevent::core OpenSSL::SSL OpenSSL::Crypto compat
-	)
+	target_link_libraries(iked-shared PRIVATE util)
 endif()
 
-list(APPEND LIBS
-	util
-	libevent::core
-	OpenSSL::SSL
-	OpenSSL::Crypto
-	compat
-	iked-shared
-)
+list(APPEND LIBS iked-shared)
 
 if (WITH_SYSTEMD)
 	list(APPEND LIBS systemd)

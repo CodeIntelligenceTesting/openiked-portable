@@ -26,8 +26,6 @@ target_include_directories(test_parser
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../iked
 )
 
-target_link_libraries(test_parser
-	PRIVATE util libevent::core OpenSSL::SSL OpenSSL::Crypto test_helper compat iked-shared
-)
+target_link_libraries(test_parser PRIVATE test_helper iked-shared)
 
 target_compile_options(test_parser PRIVATE ${CFLAGS})

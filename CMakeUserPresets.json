@@ -18,37 +18,47 @@
       "hidden": true
     },
     {
-      "name": "dev-x64-freebsd-llvm17-debug",
+      "name": "dev-x64-freebsd-llvm-debug",
       "inherits": [ "dev-base", "make", "x64-freebsd", "freebsd-llvm-base", "debug", "coverage" ]
     },
     {
-      "name": "dev-x64-freebsd-llvm17-release",
+      "name": "dev-x64-freebsd-llvm-release",
       "inherits": [ "dev-base", "make", "x64-freebsd", "freebsd-llvm-base", "release" ]
+    },
+    {
+      "name": "dev-x64-windows-llvm-debug",
+      "inherits": [ "dev-base", "vs2022", "x64-windows", "windows-llvm-base", "debug" ]
     }
   ],
   "buildPresets": [
     {
-      "name": "dev-x64-freebsd-llvm17-debug",
-      "configurePreset": "dev-x64-freebsd-llvm17-debug",
+      "name": "dev-x64-freebsd-llvm-debug",
+      "configurePreset": "dev-x64-freebsd-llvm-debug",
       "configuration": "Debug",
       "inherits": [ "freebsd" ]
     },
     {
-      "name": "dev-x64-freebsd-llvm17-release",
-      "configurePreset": "dev-x64-freebsd-llvm17-release",
+      "name": "dev-x64-freebsd-llvm-release",
+      "configurePreset": "dev-x64-freebsd-llvm-release",
       "configuration": "Release",
       "inherits": [ "freebsd" ]
+    },
+    {
+      "name": "dev-x64-windows-llvm-debug",
+      "configurePreset": "dev-x64-windows-llvm-debug",
+      "configuration": "Debug",
+      "inherits": [ "windows" ]
     }
   ],
   "testPresets": [
     {
-      "name": "dev-x64-freebsd-llvm17-debug",
-      "configurePreset": "dev-x64-freebsd-llvm17-debug",
+      "name": "dev-x64-freebsd-llvm-debug",
+      "configurePreset": "dev-x64-freebsd-llvm-debug",
       "inherits": [ "ci", "freebsd", "debug" ]
     },
     {
-      "name": "dev-x64-freebsd-llvm17-release",
-      "configurePreset": "dev-x64-freebsd-llvm17-release",
+      "name": "dev-x64-freebsd-llvm-release",
+      "configurePreset": "dev-x64-freebsd-llvm-release",
       "inherits": [ "ci", "freebsd", "release" ]
     }
   ]

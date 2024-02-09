@@ -263,12 +263,14 @@
     {
       "name": "debug",
       "configurePreset": "debug",
-      "configuration": "Debug"
+      "configuration": "Debug",
+      "hidden": true
     },
     {
       "name": "release",
       "configurePreset": "release",
-      "configuration": "Release"
+      "configuration": "Release",
+      "hidden": true
     },
     {
       "name": "gh-ubuntu22.04-llvm14-debug",
@@ -347,12 +349,14 @@
     {
       "name": "debug",
       "configurePreset": "debug",
-      "configuration": "Debug"
+      "configuration": "Debug",
+      "hidden": true
     },
     {
       "name": "release",
       "configurePreset": "release",
-      "configuration": "Release"
+      "configuration": "Release",
+      "hidden": true
     },
     {
       "name": "ci",

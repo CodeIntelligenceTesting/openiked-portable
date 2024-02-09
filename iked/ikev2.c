@@ -203,6 +203,8 @@ static struct privsep_proc procs[] = {
 	{ "control",	PROC_CONTROL,	ikev2_dispatch_control }
 };
 
+struct iked	*iked_env;
+
 void
 ikev2(struct privsep *ps, struct privsep_proc *p)
 {

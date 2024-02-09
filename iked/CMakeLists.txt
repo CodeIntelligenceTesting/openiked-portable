@@ -89,7 +89,7 @@ if(HAVE_VROUTE_NETLINK)
 	target_sources(iked-shared PRIVATE vroute-netlink.c)
 endif()
 if (WITH_APPARMOR)
-	list(APPEND SRCS apparmor.c)
+	target_sources(iked-shared PRIVATE apparmor.c)
 endif()
 
 list(APPEND SRCS

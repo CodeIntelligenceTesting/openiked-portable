@@ -19,11 +19,11 @@
     },
     {
       "name": "dev-x64-freebsd-llvm-debug",
-      "inherits": [ "dev-base", "make", "x64-freebsd", "freebsd-llvm-base", "debug", "coverage" ]
+      "inherits": [ "dev-base", "make", "x64-freebsd", "freebsd-llvm-base", "debug", "clangd", "coverage" ]
     },
     {
       "name": "dev-x64-freebsd-llvm-release",
-      "inherits": [ "dev-base", "make", "x64-freebsd", "freebsd-llvm-base", "release" ]
+      "inherits": [ "dev-base", "make", "x64-freebsd", "freebsd-llvm-base", "release", "clangd" ]
     },
     {
       "name": "dev-x64-windows-llvm-debug",

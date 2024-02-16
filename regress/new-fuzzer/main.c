@@ -1,32 +1,42 @@
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include <event.h>
 
+#include "fuzzdataprovider.h"
 #include "iked.h"
 
-int LLVMFuzzerTestOneInput(const char *data, size_t size)
+int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
 {
+    FuzzDataProvider provider = FuzzDataConstruct(__data, __size);
+
     struct iked env;
-	struct ike_header hdr;
-    struct iked_message msg;
-    struct iked_sa sa;
-
-    struct ibuf *buf = ibuf_new(data, size);
-
     memset(&env, 0, sizeof(env));
-    memset(&sa, 0, sizeof(sa));
-    memset(&msg, 0, sizeof(msg));
 
-	msg.msg_sa = &sa;
-	msg.msg_data = buf;
-	msg.msg_e = 1;
-	msg.msg_parent = &msg;
+    typedef struct {
+        struct sockaddr addr;
+        struct sockaddr mask;
+        unsigned int ifidx;
+    } vroute_getaddr_data_t;
 
-    ikev2_pld_parse(&env, &hdr, &msg, 0);
+    vroute_getaddr_data_t vroute_getaddr_data = {
+        .addr = FuzzDataReadSockAddr(&provider),
+        .mask = FuzzDataReadSockAddr(&provider),
+        .ifidx = FuzzDataReadUint32(&provider)
+    };
 
-    ibuf_free(buf);
+    struct imsg imsg = {
+        .hdr = {
+            .type = FuzzDataReadUint32(&provider),
+	        .len = sizeof(struct imsg_hdr) + /* sizeof(int) */ + sizeof(vroute_getaddr_data_t),
+            .flags = FuzzDataReadUint16(&provider),
+            .peerid = FuzzDataReadUint32(&provider),
+            .pid = FuzzDataReadUint32(&provider)
+        },
+        .fd = -1,
+        .data = &vroute_getaddr_data
+    };
+    vroute_getaddr(&env, &imsg);
 
     return 0;
 }

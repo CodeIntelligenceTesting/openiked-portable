@@ -17,6 +17,8 @@ jobs:
             os: ubuntu-22.04
           - preset: gh-ubuntu22.04-llvm15-debug
             os: ubuntu-22.04
+          - preset: ci-make-x64-freebsd-debug
+            os: FreeBSD13
     runs-on: ${{ matrix.os }}
 
     steps:

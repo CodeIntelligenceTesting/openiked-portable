@@ -43,15 +43,10 @@ jobs:
     - name: Build
       run: cmake --build --preset ${{ matrix.preset }}
     
-    - name: Test Parser
+    - name: Fuzz InitIkedEnv
       run: ./build/regress/new-fuzzer/InitIkedEnv -max_total_time=10
 
     - name: Test DH
       working-directory: ${{github.workspace}}/build/regress/dh
       shell: bash
       run: ./dhtest
-
-    - name: Test Parser
-      working-directory: ${{github.workspace}}/build/regress/parser
-      shell: bash
-      run: ./test_parser

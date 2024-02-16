@@ -79,7 +79,7 @@ struct sockaddr FuzzDataReadSockAddr(FuzzDataProvider *data)
     struct sockaddr retval = {
 #ifdef HAVE_SOCKADDR_SA_LEN
         .sa_len = sizeof(struct sockaddr),
-#elif
+#endif
         .sa_family = FuzzDataReadUint32(data),
         .sa_data = {} 
     };

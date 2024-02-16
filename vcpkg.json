@@ -3,7 +3,10 @@
   "version-string": "7.3.9999",
   "dependencies": [
     {
-      "name": "openssl"
+      "name": "openssl",
+      "features": [
+        "weak-ssl-ciphers"
+      ]
     },
     {
       "name": "libevent"

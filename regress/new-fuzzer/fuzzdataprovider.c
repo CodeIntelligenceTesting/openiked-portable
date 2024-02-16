@@ -77,9 +77,11 @@ uint8_t *FuzzDataReadByteArray(FuzzDataProvider *data, size_t nmemb)
 struct sockaddr FuzzDataReadSockAddr(FuzzDataProvider *data)
 {
     struct sockaddr retval = {
+#ifdef HAVE_SOCKADDR_SA_LEN
         .sa_len = sizeof(struct sockaddr),
+#elif
         .sa_family = FuzzDataReadUint32(data),
-        .sa_data = {}
+        .sa_data = {} 
     };
     uint8_t *saData = FuzzDataReadByteArray(data, sizeof(retval.sa_data));
     memcpy(&retval.sa_data, saData, sizeof(retval.sa_data));

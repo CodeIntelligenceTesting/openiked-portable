@@ -278,6 +278,15 @@
       "hidden": true
     },
     {
+      "name": "openbsd",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "OpenBSD"
+      },
+      "hidden": true
+    },
+    {
       "name": "linux",
       "condition": {
         "type": "equals",
@@ -342,6 +351,18 @@
       "configurePreset": "ci-make-x64-freebsd-release",
       "configuration": "Release",
       "inherits": [ "freebsd" ]
+    },
+    {
+      "name": "ci-make-x64-openbsd-debug",
+      "configurePreset": "ci-make-x64-openbsd-debug",
+      "configuration": "Debug",
+      "inherits": [ "openbsd" ]
+    },
+    {
+      "name": "ci-make-x64-openbsd-release",
+      "configurePreset": "ci-make-x64-openbsd-release",
+      "configuration": "Release",
+      "inherits": [ "openbsd" ]
     },
     {
       "name": "ci-make-x64-linux-debug",
@@ -410,6 +431,15 @@
       "hidden": true
     },
     {
+      "name": "openbsd",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "OpenBSD"
+      },
+      "hidden": true
+    },
+    {
       "name": "linux",
       "condition": {
         "type": "equals",
@@ -456,6 +486,16 @@
       "name": "ci-make-x64-freebsd-release",
       "configurePreset": "ci-make-x64-freebsd-release",
       "inherits": [ "ci", "freebsd", "release" ]
+    },
+    {
+      "name": "ci-make-x64-openbsd-debug",
+      "configurePreset": "ci-make-x64-openbsd-debug",
+      "inherits": [ "ci", "openbsd", "debug" ]
+    },
+    {
+      "name": "ci-make-x64-openbsd-release",
+      "configurePreset": "ci-make-x64-openbsd-release",
+      "inherits": [ "ci", "openbsd", "release" ]
     },
     {
       "name": "ci-make-x64-linux-debug",

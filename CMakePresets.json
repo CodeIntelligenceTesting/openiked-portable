@@ -68,6 +68,15 @@
       "hidden": true
     },
     {
+      "name": "openbsd",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "OpenBSD"
+      },
+      "hidden": true
+    },
+    {
       "name": "linux",
       "condition": {
         "type": "equals",
@@ -92,6 +101,14 @@
       },
       "hidden": true,
       "inherits": ["freebsd"]
+    },
+    {
+      "name": "x64-openbsd",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-openbsd"
+      },
+      "hidden": true,
+      "inherits": ["openbsd"]
     },
     {
       "name": "x64-linux",
@@ -161,6 +178,16 @@
       "hidden": true
     },
     {
+      "name": "openbsd-llvm-base",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "LLVM_COV_COMMAND": "llvm-cov",
+        "LLVM_PROFDATA_COMMAND": "llvm-profdata"
+      },
+      "hidden": true
+    },
+    {
       "name": "windows-llvm-base",
       "toolset": "ClangCL",
       "hidden": true
@@ -214,6 +241,14 @@
     {
       "name": "ci-make-x64-freebsd-release",
       "inherits": [ "ci-base", "make", "x64-freebsd", "release" ]
+    },
+    {
+      "name": "ci-make-x64-openbsd-debug",
+      "inherits": [ "ci-base", "make", "x64-openbsd", "debug" ]
+    },
+    {
+      "name": "ci-make-x64-openbsd-release",
+      "inherits": [ "ci-base", "make", "x64-openbsd", "release" ]
     },
     {
       "name": "ci-vs2022-x64-windows-debug",

@@ -43,16 +43,8 @@ jobs:
     - name: Build
       run: cmake --build --preset ${{ matrix.preset }}
     
-    - name: Print used shared libraries
-      run: ldd ./build/regress/new-fuzzer/InitIkedEnv
-    
     - name: Fuzz InitIkedEnv
-      env:
-        OPENSSL_CONF: ${{github.workspace}}/regress/new-fuzzer/openssl.cnf
-      run: |
-        env
-        cat ${OPENSSL_CONF}
-        ./build/regress/new-fuzzer/InitIkedEnv -max_total_time=10
+      run: ctest --preset ${{ matrix.preset }}
 
     - name: Test DH
       working-directory: ${{github.workspace}}/build/regress/dh

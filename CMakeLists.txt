@@ -15,6 +15,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(openiked)
+enable_testing()
 
 option(ASAN "Enable Address Sanitation" OFF)
 option(UBSAN "Enable Undefined Behaviour Sanitation" OFF)

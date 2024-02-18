@@ -44,7 +44,10 @@ jobs:
       run: cmake --build --preset ${{ matrix.preset }}
     
     - name: Fuzz InitIkedEnv
-      run: ctest --preset ${{ matrix.preset }}
+      run: ctest --preset ${{ matrix.preset }} --output-junit test.xml
+    
+    - name: Print Test Result
+      run: cat build/test.xml
 
     - name: Test DH
       working-directory: ${{github.workspace}}/build/regress/dh

@@ -43,6 +43,9 @@ jobs:
     - name: Build
       run: cmake --build --preset ${{ matrix.preset }}
     
+    - name: Print used shared libraries
+      run: ldd ./build/regress/new-fuzzer/InitIkedEnv
+    
     - name: Fuzz InitIkedEnv
       run: ./build/regress/new-fuzzer/InitIkedEnv -max_total_time=10
 

@@ -48,7 +48,7 @@ jobs:
     
     - name: Fuzz InitIkedEnv
       env:
-        OPENSSL_CONF: ${{github.workspace}}/build/regress/new-fuzzer/openssl.cnf
+        OPENSSL_CONF: ${{github.workspace}}/regress/new-fuzzer/openssl.cnf
       run: ./build/regress/new-fuzzer/InitIkedEnv -max_total_time=10
 
     - name: Test DH

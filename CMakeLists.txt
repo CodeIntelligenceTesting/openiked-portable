@@ -12,7 +12,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.25)
 
 project(openiked)
 
@@ -436,5 +436,6 @@ if(CLUSTERFUZZ)
 		target_compile_options(compat PUBLIC -fsanitize=fuzzer-no-link)
 		target_link_options(compat PUBLIC -fsanitize=fuzzer-no-link)
 	endif()
+	add_subdirectory(regress/new-fuzzer)
 endif()
 

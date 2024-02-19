@@ -87,7 +87,6 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     struct iked *env = create_iked_env();
     iked_env = env;
 
-#if 1
     typedef struct {
         struct sockaddr addr;
         struct sockaddr mask;
@@ -112,7 +111,6 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
         .data = &vroute_getaddr_data
     };
     vroute_getaddr(env, &imsg);
-#endif
 
     destroy_iked_env(env);
     iked_env = NULL;

@@ -20,7 +20,6 @@ list(APPEND SRCS
 	test_parser_fuzz.c
 )
 
-set(CMAKE_C_COMPILER clang)
 add_executable(test_libfuzzer ${SRCS})
 
 # when using clusterfuzz we need static linking and clusterfuzz' compiler arguments

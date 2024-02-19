@@ -49,11 +49,7 @@ jobs:
       run: cmake --build --preset ${{ matrix.preset }}
     
     - name: Run Tests
-      continue-on-error: true
       run: ctest --preset ${{ matrix.preset }} --output-junit ctest-report.xml
-    
-    - name: Print Test Result
-      run: cat build/ctest-report.xml
 
     - name: Publish Test Report
       uses: mikepenz/action-junit-report@v4

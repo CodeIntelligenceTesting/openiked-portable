@@ -57,6 +57,7 @@ jobs:
       with:
         check_name: "Test Report for ${{ matrix.preset }}"
         detailed_summary: true
+        include_passed: true
         report_paths: 'build/ctest-report.xml'
 
     - name: Publish Artifacts

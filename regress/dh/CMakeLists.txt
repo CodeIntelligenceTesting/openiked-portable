@@ -15,3 +15,5 @@
 add_executable(dhtest)
 target_sources(dhtest PRIVATE dhtest.c)
 target_link_libraries(dhtest PRIVATE iked-shared compat)
+
+add_test(NAME dhtest COMMAND dhtest)

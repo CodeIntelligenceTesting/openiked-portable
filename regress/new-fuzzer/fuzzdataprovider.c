@@ -1,3 +1,5 @@
+#include <netinet/in.h>
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -76,15 +78,37 @@ uint8_t *FuzzDataReadByteArray(FuzzDataProvider *data, size_t nmemb)
 
 struct sockaddr FuzzDataReadSockAddr(FuzzDataProvider *data)
 {
-    struct sockaddr retval = {
+    /*
+     * should use c++ static assert for this one if possible
+     */
+    assert(sizeof(struct sockaddr_in) == sizeof(struct sockaddr));
+
+    struct sockaddr_in retval;
+    /*
+     * do _not_ write random data into the unnamed parts of this structure.
+     * On some operating systems, there is sa_len, others have sin_len, and
+     * none of these are standartized, yet all of them default to autodetection
+     * if they are zero-ed.
+     */
+    memset(&retval, 0, sizeof(retval));
+
 #ifdef HAVE_SOCKADDR_SA_LEN
-        .sa_len = sizeof(struct sockaddr),
+    /*
+     * set `sin_len`
+     * The `sin_len` name is not standartized though, so use `sa_len` of `struct sockaddr`.
+     * `sa_len` is not standartized either, however we have a macro indicating it's
+     * presence, while we don't have a macro for `sin_len`.
+     */
+    ((struct sockaddr *)(&retval))->sa_len = sizeof(retval);
 #endif
-        .sa_family = FuzzDataReadUint32(data),
-        .sa_data = {} 
-    };
-    uint8_t *saData = FuzzDataReadByteArray(data, sizeof(retval.sa_data));
-    memcpy(&retval.sa_data, saData, sizeof(retval.sa_data));
-    free(saData);
-    return retval;
+
+    retval.sin_family = AF_INET; /* the vroute-netlink implementation seems to rely on this field having a sane value */
+    retval.sin_port = 0; /* we can fuzz this one */
+    retval.sin_addr.s_addr = 0; /* we can fuzz this one, too */
+    /* there is some padding, which can also be written fuzzy junk into but it _should_ be irrelevant. */
+
+    /*
+     * hard casting is the way this structure is used anyways.
+     */
+    return *(struct sockaddr *)(&retval);
 }

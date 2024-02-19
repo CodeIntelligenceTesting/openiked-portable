@@ -60,4 +60,5 @@ jobs:
       if: success() || failure() # always run even if the previous step fails
       with:
         check_name: "Test Report for ${{ matrix.preset }}"
+        detailed_summary: true
         report_paths: 'build/ctest-report.xml'

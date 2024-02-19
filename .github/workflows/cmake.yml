@@ -58,3 +58,10 @@ jobs:
         check_name: "Test Report for ${{ matrix.preset }}"
         detailed_summary: true
         report_paths: 'build/ctest-report.xml'
+
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v4
+      if: success() || failure()
+        with:
+          path: |
+            build/ctest-report.xml

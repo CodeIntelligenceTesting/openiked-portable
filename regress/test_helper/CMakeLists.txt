@@ -25,5 +25,5 @@ target_include_directories(test_helper
 )
 
 target_link_libraries(test_helper
-	PRIVATE compat
+	PUBLIC compat
 )

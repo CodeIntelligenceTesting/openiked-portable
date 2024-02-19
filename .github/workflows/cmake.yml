@@ -62,6 +62,6 @@ jobs:
     - name: Publish Artifacts
       uses: actions/upload-artifact@v4
       if: success() || failure()
-        with:
-          path: |
-            build/ctest-report.xml
+      with:
+        path: |
+          build/ctest-report.xml

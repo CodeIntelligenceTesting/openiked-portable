@@ -464,6 +464,9 @@
     {
       "name": "ci",
       "output": {
+        "maxPassedTestOutputSize": 1048576,
+        "maxFailedTestOutputSize": 1048576,
+        "outputJUnitFile": "ctest-${presetName}.junit.xml",
         "verbosity": "extra"
       },
       "hidden": true

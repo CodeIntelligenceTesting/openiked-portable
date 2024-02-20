@@ -72,14 +72,19 @@ uint8_t *FuzzDataReadRemainingAsString(FuzzDataProvider *data)
     return retval;
 }
 
+uint8_t *FuzzDataReadIntoByteArray(FuzzDataProvider *data, uint8_t *dst, size_t nmemb)
+{
+    for(size_t i=0; i<nmemb; ++i) {
+        dst[i] = FuzzDataReadUint8(data);
+    }
+    return dst;
+}
+
 uint8_t *FuzzDataReadByteArray(FuzzDataProvider *data, size_t nmemb)
 {
     assert(nmemb > 0);
     uint8_t *retval = malloc(nmemb);
-    for(size_t i=0; i<nmemb; ++i) {
-        retval[i] = FuzzDataReadUint8(data);
-    }
-    return retval;
+    return FuzzDataReadIntoByteArray(data, retval, nmemb);
 }
 
 struct sockaddr FuzzDataReadSockAddr(FuzzDataProvider *data)

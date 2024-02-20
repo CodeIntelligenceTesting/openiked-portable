@@ -59,7 +59,7 @@ jobs:
         annotate_notice: true
         detailed_summary: true
         include_passed: true
-        report_paths: build/ctest-${{matrix.presetName}}.junit.xml
+        report_paths: build/ctest-${{matrix.preset}}.junit.xml
 
     - name: Publish Artifacts
       uses: actions/upload-artifact@v4
@@ -67,4 +67,4 @@ jobs:
       with:
         name: ${{ matrix.preset }}
         path: |
-          build/ctest-${{matrix.presetName}}.junit.xml
+          build/ctest-${{matrix.preset}}.junit.xml

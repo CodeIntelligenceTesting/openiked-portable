@@ -41,12 +41,18 @@ uint8_t FuzzDataReadUint8(FuzzDataProvider *data)
 
 uint16_t FuzzDataReadUint16(FuzzDataProvider *data)
 {
-    return (FuzzDataReadUint8(data) << 8) | (FuzzDataReadUint8(data));
+    uint16_t retval = FuzzDataReadUint8(data);
+    retval <<= 8;
+    retval |= FuzzDataReadUint8(data);
+    return retval;
 }
 
 uint32_t FuzzDataReadUint32(FuzzDataProvider *data)
 {
-    return (FuzzDataReadUint16(data) << 16) | (FuzzDataReadUint16(data));
+    uint32_t retval = FuzzDataReadUint16(data);
+    retval <<= 16;
+    retval |= FuzzDataReadUint16(data);
+    return retval;
 }
 
 uint8_t *FuzzDataReadRemainingAsString(FuzzDataProvider *data)

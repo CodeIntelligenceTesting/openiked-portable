@@ -10,6 +10,11 @@ add_executable(NewFuzzTarget)
 target_sources(NewFuzzTarget PRIVATE main.c)
 target_link_libraries(NewFuzzTarget PRIVATE iked-shared compat CIFuzzTestHelpers)
 
+add_executable(ikev2_dispatch_cert)
+target_sources(ikev2_dispatch_cert PRIVATE ikev2_dispatch_cert.c)
+target_link_libraries(ikev2_dispatch_cert PRIVATE iked-shared compat CIFuzzTestHelpers)
+add_test(NAME ikev2_dispatch_cert COMMAND ikev2_dispatch_cert -max_total_time=10 COMMAND_EXPAND_LISTS)
+set_property(TEST ikev2_dispatch_cert APPEND PROPERTY ENVIRONMENT_MODIFICATION "OPENSSL_CONF=set:${CMAKE_CURRENT_SOURCE_DIR}/openssl.cnf")
 
 add_executable(vroute_getaddr)
 target_sources(vroute_getaddr PRIVATE vroute_getaddr.c)

@@ -1,4 +1,4 @@
-project(NewFuzzers)
+project(CIFuzzTargets)
 
 add_library(CIFuzzTestHelpers)
 target_sources(CIFuzzTestHelpers PRIVATE fuzzdataprovider.c iked_env.c)

@@ -288,6 +288,64 @@
     {
       "name": "ci-x64-windows-vs2022-llvm-release",
       "inherits": [ "ci-base", "vs2022", "x64-windows", "llvm-cl", "release" ]
+    },
+    {
+      "name": "cifuzz (Coverage)",
+      "displayName": "cifuzz (Coverage)",
+      "binaryDir": "${sourceDir}/.cifuzz-build/replayer/gcov",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CIFUZZ_ENGINE": "replayer",
+        "CIFUZZ_SANITIZERS": "gcov",
+        "CIFUZZ_TESTING": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "CMAKE_BUILD_RPATH_USE_ORIGIN": {
+          "type": "BOOL",
+          "value": "ON"
+        }
+      }
+    },
+    {
+      "name": "cifuzz (Fuzzing)",
+      "displayName": "cifuzz (Fuzzing)",
+      "binaryDir": "${sourceDir}/.cifuzz-build/libfuzzer/address+undefined",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CIFUZZ_ENGINE": "libfuzzer",
+        "CIFUZZ_SANITIZERS": "address;undefined",
+        "CIFUZZ_TESTING": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "CMAKE_BUILD_RPATH_USE_ORIGIN": {
+          "type": "BOOL",
+          "value": "ON"
+        }
+      },
+      "environment": {
+        "CC": "clang",
+        "CXX": "clang++"
+      }
+    },
+    {
+      "name": "cifuzz (Regression Test)",
+      "displayName": "cifuzz (Regression Test)",
+      "binaryDir": "${sourceDir}/.cifuzz-build/replayer/address+undefined",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CIFUZZ_ENGINE": "replayer",
+        "CIFUZZ_SANITIZERS": "address;undefined",
+        "CIFUZZ_TESTING": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "CMAKE_BUILD_RPATH_USE_ORIGIN": {
+          "type": "BOOL",
+          "value": "ON"
+        }
+      }
     }
   ],
   "buildPresets": [
@@ -446,6 +504,24 @@
       "configurePreset": "ci-x64-windows-vs2022-llvm-release",
       "configuration": "Release",
       "inherits": [ "windows" ]
+    },
+    {
+      "name": "cifuzz (Coverage)",
+      "displayName": "cifuzz (Coverage)",
+      "configurePreset": "cifuzz (Coverage)",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "cifuzz (Fuzzing)",
+      "displayName": "cifuzz (Fuzzing)",
+      "configurePreset": "cifuzz (Fuzzing)",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "cifuzz (Regression Test)",
+      "displayName": "cifuzz (Regression Test)",
+      "configurePreset": "cifuzz (Regression Test)",
+      "configuration": "RelWithDebInfo"
     }
   ],
   "testPresets": [
@@ -596,6 +672,16 @@
       "name": "ci-x64-windows-vs2022-llvm-release",
       "configurePreset": "ci-x64-windows-vs2022-llvm-release",
       "inherits": [ "ci", "windows", "release" ]
+    },
+    {
+      "name": "cifuzz (Regression Test)",
+      "displayName": "cifuzz (Regression Test)",
+      "configurePreset": "cifuzz (Regression Test)",
+      "filter": {
+        "include": {
+          "label": "^cifuzz_regression_test$"
+        }
+      }
     }
   ]
 }

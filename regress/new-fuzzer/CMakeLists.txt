@@ -1,17 +1,19 @@
 project(NewFuzzers)
 
-add_library(FuzzDataProvider fuzzdataprovider.c)
-target_compile_options(FuzzDataProvider PUBLIC -fsanitize=fuzzer -fsanitize=address)
-target_link_options(FuzzDataProvider PUBLIC -fsanitize=fuzzer -fsanitize=address)
+add_library(CIFuzzTestHelpers)
+target_sources(CIFuzzTestHelpers PRIVATE fuzzdataprovider.c iked_env.c)
+target_link_libraries(CIFuzzTestHelpers iked-shared compat)
+target_compile_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer -fsanitize=address)
+target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer -fsanitize=address)
 
 add_executable(NewFuzzTarget)
 target_sources(NewFuzzTarget PRIVATE main.c)
-target_link_libraries(NewFuzzTarget PRIVATE iked-shared compat FuzzDataProvider)
+target_link_libraries(NewFuzzTarget PRIVATE iked-shared compat CIFuzzTestHelpers)
 
 
 add_executable(vroute_getaddr)
 target_sources(vroute_getaddr PRIVATE vroute_getaddr.c)
-target_link_libraries(vroute_getaddr PRIVATE iked-shared compat FuzzDataProvider)
+target_link_libraries(vroute_getaddr PRIVATE iked-shared compat CIFuzzTestHelpers)
 add_test(NAME vroute_getaddr COMMAND vroute_getaddr -max_total_time=10 COMMAND_EXPAND_LISTS)
 set_property(TEST vroute_getaddr APPEND PROPERTY ENVIRONMENT_MODIFICATION "OPENSSL_CONF=set:${CMAKE_CURRENT_SOURCE_DIR}/openssl.cnf")
 

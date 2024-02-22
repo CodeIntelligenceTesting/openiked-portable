@@ -305,7 +305,8 @@
           "type": "BOOL",
           "value": "ON"
         }
-      }
+      },
+      "inherits": [ "base" ]
     },
     {
       "name": "cifuzz (Fuzzing)",
@@ -327,7 +328,8 @@
       "environment": {
         "CC": "clang",
         "CXX": "clang++"
-      }
+      },
+      "inherits": [ "base" ]
     },
     {
       "name": "cifuzz (Regression Test)",
@@ -345,7 +347,8 @@
           "type": "BOOL",
           "value": "ON"
         }
-      }
+      },
+      "inherits": [ "base" ]
     }
   ],
   "buildPresets": [

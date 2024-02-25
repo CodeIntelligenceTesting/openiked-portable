@@ -9,6 +9,7 @@
 
 #include "iked.h"
 #include "iked_env.h"
+#include "vroute_cleanup_leaked_sockets.h"
 
 struct iked *create_iked_env()
 {
@@ -67,6 +68,7 @@ void destroy_iked_env(struct iked *env)
 
 #if defined(HAVE_VROUTE)
 	vroute_cleanup(env);
+	vroute_cleanup_leaked_sockets(env);
 #endif
 	free(env->sc_vroute);
 	free(env);

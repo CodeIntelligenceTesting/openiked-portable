@@ -2,6 +2,16 @@ project(CIFuzzTargets)
 
 add_library(CIFuzzTestHelpers)
 target_sources(CIFuzzTestHelpers PRIVATE fuzzdataprovider.c iked_env.c)
+#
+# Mimic vroute branching from iked subproject.
+# Platform test results provided by the top level CMakeLists.txt
+#
+if(HAVE_VROUTE)
+	target_sources(CIFuzzTestHelpers PRIVATE vroute_cleanup_leaked_sockets.c)
+endif()
+if(HAVE_VROUTE_NETLINK)
+	target_sources(CIFuzzTestHelpers PRIVATE vroute_cleanup_leaked_sockets-netlink.c)
+endif()
 target_link_libraries(CIFuzzTestHelpers iked-shared compat)
 target_compile_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer -fsanitize=address)
 target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer -fsanitize=address)

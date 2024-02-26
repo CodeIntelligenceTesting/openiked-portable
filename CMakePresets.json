@@ -295,6 +295,8 @@
       "binaryDir": "${sourceDir}/.cifuzz-build/libfuzzer/coverage",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
         "CIFUZZ_ENGINE": "replayer",
         "CIFUZZ_SANITIZERS": "gcov",
         "CIFUZZ_TESTING": {

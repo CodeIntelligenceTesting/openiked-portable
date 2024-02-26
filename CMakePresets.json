@@ -292,7 +292,7 @@
     {
       "name": "cifuzz (Coverage)",
       "displayName": "cifuzz (Coverage)",
-      "binaryDir": "${sourceDir}/.cifuzz-build/replayer/gcov",
+      "binaryDir": "${sourceDir}/.cifuzz-build/libfuzzer/coverage",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
         "CIFUZZ_ENGINE": "replayer",

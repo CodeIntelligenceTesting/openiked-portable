@@ -62,8 +62,20 @@ struct iked *create_iked_env()
     return env;
 }
 
+void destroy_iked_env_aux(struct iked *env)
+{
+    /*
+     * allocated in
+     *   https://github.com/openiked/openiked-portable/blob/a0fc2e0d629a081b170adabc8d092653b07f1d4a/iked/ikev2.c#L342
+     * and not neccessarily freed.
+     */
+    ibuf_free(env->sc_certreq);
+}
+
 void destroy_iked_env(struct iked *env)
 {
+    destroy_iked_env_aux(env);
+
     // proc_kill(&env->sc_ps);
 
 #if defined(HAVE_VROUTE)

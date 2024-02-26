@@ -37,6 +37,7 @@ jobs:
       if: ${{ matrix.os == 'FreeBSD13' }}
       run: |
         pkg install -y bash cmake curl git ninja pkgconf zip unzip
+        pkg install -y autoconf autoconf-archive gmake
 
     - name: Checkout Repository
       uses: actions/checkout@v4

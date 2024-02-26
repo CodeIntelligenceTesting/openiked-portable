@@ -74,8 +74,6 @@ void destroy_iked_env_aux(struct iked *env)
 
 void destroy_iked_env(struct iked *env)
 {
-    destroy_iked_env_aux(env);
-
     // proc_kill(&env->sc_ps);
 
 #if defined(HAVE_VROUTE)

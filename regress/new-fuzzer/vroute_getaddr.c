@@ -44,6 +44,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     };
     vroute_getaddr(env, &imsg);
 
+    destroy_iked_env_aux(env);
     destroy_iked_env(env);
     iked_env = NULL;
 

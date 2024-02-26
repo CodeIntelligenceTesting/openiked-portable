@@ -115,6 +115,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
 
     ikev2_dispatch_cert(-1, NULL, &imsg);
 
+    destroy_iked_env_aux(env);
     destroy_iked_env(env);
     iked_env = NULL;
 

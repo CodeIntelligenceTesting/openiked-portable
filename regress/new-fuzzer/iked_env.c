@@ -52,7 +52,7 @@ struct iked *create_iked_env()
 
     log_setverbose(1);
 
-    // ps->ps_noaction = 1;
+    ps->ps_noaction = 1;
     ps->ps_instance = 0;
 
 #if defined(HAVE_VROUTE)

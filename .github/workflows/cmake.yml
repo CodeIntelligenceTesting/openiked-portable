@@ -35,7 +35,8 @@ jobs:
     
     - name: Prepare FreeBSD13
       if: ${{ matrix.os == 'FreeBSD13' }}
-      run: echo "needed?"
+      run: |
+        pkg install -y bash cmake curl git ninja pkgconf zip unzip
 
     - name: Checkout Repository
       uses: actions/checkout@v4

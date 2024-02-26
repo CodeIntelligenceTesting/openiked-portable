@@ -1,7 +1,7 @@
 project(CIFuzzTargets)
 
 add_library(CIFuzzTestHelpers)
-target_sources(CIFuzzTestHelpers PRIVATE fuzzdataprovider.c iked_env.c)
+target_sources(CIFuzzTestHelpers PRIVATE ca.c fuzzdataprovider.c iked_env.c)
 #
 # Mimic vroute branching from iked subproject.
 # Platform test results provided by the top level CMakeLists.txt

@@ -18,6 +18,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     /* need to set global variable */
     struct iked *env = create_iked_env();
     iked_env = env;
+    create_iked_env_aux(env);
 
     typedef struct {
         struct sockaddr addr;

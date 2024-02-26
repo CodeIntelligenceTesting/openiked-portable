@@ -1,5 +1,7 @@
 #pragma once
 
+#include <event.h>
+
 #include "iked.h"
 
 /*
@@ -10,6 +12,11 @@
  */
 struct iked *create_iked_env();
 
+
+/*
+ * Helper procedure to initialize fields not initialized by iked.c's `main`.
+ */
+void create_iked_env_aux(struct iked *env);
 
 /*
  * Helper procedure to release iked structure fields not released by `destroy_iked_env`.

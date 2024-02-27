@@ -70,3 +70,4 @@ jobs:
         name: ${{ matrix.preset }}
         path: |
           build/ctest-${{matrix.preset}}.junit.xml
+          build/**/coverage/**/*

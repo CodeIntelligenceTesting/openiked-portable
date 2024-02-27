@@ -251,7 +251,7 @@
     },
     {
       "name": "ci-x64-linux-debug",
-      "inherits": [ "ci-base", "make", "x64-linux", "debug", "coverage" ]
+      "inherits": [ "ci-base", "make", "x64-linux", "debug" ]
     },
     {
       "name": "ci-x64-linux-release",
@@ -259,19 +259,19 @@
     },
     {
       "name": "ci-x64-freebsd-debug",
-      "inherits": [ "ci-base", "make", "x64-freebsd", "debug" ]
+      "inherits": [ "ci-base", "make", "x64-freebsd", "llvm-base", "debug", "coverage" ]
     },
     {
       "name": "ci-x64-freebsd-release",
-      "inherits": [ "ci-base", "make", "x64-freebsd", "release" ]
+      "inherits": [ "ci-base", "make", "x64-freebsd", "llvm-base", "release" ]
     },
     {
       "name": "ci-x64-openbsd-debug",
-      "inherits": [ "ci-base", "make", "x64-openbsd", "debug" ]
+      "inherits": [ "ci-base", "make", "x64-openbsd", "llvm-base", "debug", "coverage" ]
     },
     {
       "name": "ci-x64-openbsd-release",
-      "inherits": [ "ci-base", "make", "x64-openbsd", "release" ]
+      "inherits": [ "ci-base", "make", "x64-openbsd", "llvm-base", "release" ]
     },
     {
       "name": "ci-x64-windows-vs2022-debug",

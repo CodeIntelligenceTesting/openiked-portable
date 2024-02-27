@@ -16,27 +16,63 @@ target_link_libraries(CIFuzzTestHelpers iked-shared compat)
 target_compile_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer -fsanitize=address)
 target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer -fsanitize=address)
 
-if (CIFUZZ_TESTING)
-  add_fuzz_test(ikev2_dispatch_cert ikev2_dispatch_cert.c)
-  target_link_libraries(ikev2_dispatch_cert PRIVATE iked-shared compat CIFuzzTestHelpers)
-else ()
-  add_executable(ikev2_dispatch_cert)
-  target_sources(ikev2_dispatch_cert PRIVATE ikev2_dispatch_cert.c)
-  target_link_libraries(ikev2_dispatch_cert PRIVATE iked-shared compat CIFuzzTestHelpers)
-  add_test(NAME ikev2_dispatch_cert COMMAND ikev2_dispatch_cert -max_total_time=10 COMMAND_EXPAND_LISTS)
-  set_property(TEST ikev2_dispatch_cert APPEND PROPERTY ENVIRONMENT_MODIFICATION "OPENSSL_CONF=set:${CMAKE_CURRENT_SOURCE_DIR}/openssl.cnf")
-endif ()
+function(AddFuzzTarget)
+	set(options)
+	set(oneValueArgs TARGET_NAME)
+	set(multiValueArgs SOURCES DEPENDENCIES)
 
-if (CIFUZZ_TESTING)
-  add_fuzz_test(vroute_getaddr vroute_getaddr.c)
-  target_link_libraries(vroute_getaddr PRIVATE iked-shared compat CIFuzzTestHelpers)
-else ()
-  add_executable(vroute_getaddr)
-  target_sources(vroute_getaddr PRIVATE vroute_getaddr.c)
-  target_link_libraries(vroute_getaddr PRIVATE iked-shared compat CIFuzzTestHelpers)
-  add_test(NAME vroute_getaddr COMMAND vroute_getaddr -max_total_time=10 COMMAND_EXPAND_LISTS)
-  set_property(TEST vroute_getaddr APPEND PROPERTY ENVIRONMENT_MODIFICATION "OPENSSL_CONF=set:${CMAKE_CURRENT_SOURCE_DIR}/openssl.cnf")
-endif ()
+	cmake_parse_arguments(params "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    message(STATUS "Fuzz Target ${params_TARGET_NAME}")
+
+    if(CIFUZZ_TESTING)
+        add_fuzz_test(${params_TARGET_NAME} ${params_SOURCES})
+        target_link_libraries(${params_TARGET_NAME} PRIVATE ${params_DEPENDENCIES})
+    else(CIFUZZ_TESTING)
+        add_executable(${params_TARGET_NAME})
+        target_sources(${params_TARGET_NAME} PRIVATE ${params_SOURCES})
+        target_link_libraries(${params_TARGET_NAME} PRIVATE ${params_DEPENDENCIES})
+        add_test(NAME ${params_TARGET_NAME}/fuzz COMMAND ${params_TARGET_NAME} -max_total_time=10 COMMAND_EXPAND_LISTS)
+        set_property(TEST ${params_TARGET_NAME}/fuzz APPEND PROPERTY ENVIRONMENT_MODIFICATION "OPENSSL_CONF=set:${CMAKE_CURRENT_SOURCE_DIR}/openssl.cnf")
+
+        if(COVERAGE_REPORT)
+            set(llvmProfFile "$<TARGET_FILE:${params_TARGET_NAME}>.profraw.${PRESET_NAME}")
+	        set(llvmProfData "$<TARGET_FILE:${params_TARGET_NAME}>.profdata.${PRESET_NAME}")
+            set_property(TEST ${params_TARGET_NAME}/fuzz APPEND PROPERTY ENVIRONMENT_MODIFICATION "LLVM_PROFILE_FILE=set:${llvmProfFile}")
+            set_tests_properties(${params_TARGET_NAME}/fuzz PROPERTIES FIXTURES_REQUIRED ${params_TARGET_NAME}Fixture)
+
+            add_test(NAME ${params_TARGET_NAME}/mergeCoverageData    COMMAND ${LLVM_PROFDATA_COMMAND} merge -sparse "${llvmProfFile}" -o "${llvmProfData}")
+		    add_test(NAME ${params_TARGET_NAME}/generateCoverageHtml COMMAND ${LLVM_COV_COMMAND} show "$<TARGET_FILE:${params_TARGET_NAME}>" "-instr-profile=${llvmProfData}" --output-dir "${CMAKE_CURRENT_BINARY_DIR}/coverage/${params_TARGET_NAME}/${PRESET_NAME}" "--format=html")
+
+            set_tests_properties(${params_TARGET_NAME}/mergeCoverageData PROPERTIES FIXTURES_CLEANUP ${params_TARGET_NAME}Fixture)
+            set_tests_properties(${params_TARGET_NAME}/generateCoverageHtml PROPERTIES FIXTURES_CLEANUP ${params_TARGET_NAME}Fixture)
+
+		    set_tests_properties(${params_TARGET_NAME}/generateCoverageHtml  PROPERTIES DEPENDS ${params_TARGET_NAME}/mergeCoverageData)
+        endif(COVERAGE_REPORT)
+    endif(CIFUZZ_TESTING)
+endfunction(AddFuzzTarget)
+
+AddFuzzTarget(
+    TARGET_NAME
+        ikev2_dispatch_cert
+    SOURCES
+        ikev2_dispatch_cert.c
+    DEPENDENCIES
+        CIFuzzTestHelpers
+        iked-shared
+        compat
+)
+
+AddFuzzTarget(
+    TARGET_NAME
+        vroute_getaddr
+    SOURCES
+        vroute_getaddr.c
+    DEPENDENCIES
+        CIFuzzTestHelpers
+        iked-shared
+        compat
+)
 
 # these are just for diagnostics in case the fuzzers refuse to load the legacy ciphersuite
 add_test(NAME OpenSSLProvidersDefault COMMAND ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/openssl/openssl list -providers -verbose)

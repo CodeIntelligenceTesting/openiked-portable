@@ -184,6 +184,7 @@
       "name": "base",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
+        "PRESET_NAME": "${presetName}",
         "ASAN": "On",
         "CLUSTERFUZZ": "On"
       },

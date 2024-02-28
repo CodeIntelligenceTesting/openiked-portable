@@ -82,7 +82,12 @@ uint8_t *FuzzDataReadIntoByteArray(FuzzDataProvider *data, uint8_t *dst, size_t 
 
 uint8_t *FuzzDataReadByteArray(FuzzDataProvider *data, size_t nmemb)
 {
-    assert(nmemb > 0);
+    if (nmemb == 0) {
+        /*
+         * malloc(0) is undefined.
+         */
+        nmemb = 1;
+    }
     uint8_t *retval = malloc(nmemb);
     return FuzzDataReadIntoByteArray(data, retval, nmemb);
 }

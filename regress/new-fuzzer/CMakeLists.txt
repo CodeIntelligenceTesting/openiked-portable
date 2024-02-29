@@ -76,9 +76,9 @@ AddFuzzTarget(
 
 AddFuzzTarget(
     TARGET_NAME
-        parent_reload
+        parse_config
     SOURCES
-        parent_reload.c
+        parse_config.c
     DEPENDENCIES
         CIFuzzTestHelpers
         iked-shared

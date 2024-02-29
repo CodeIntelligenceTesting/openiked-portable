@@ -65,6 +65,17 @@ AddFuzzTarget(
 
 AddFuzzTarget(
     TARGET_NAME
+        ca_dispatch_ikev2
+    SOURCES
+        ca_dispatch_ikev2.c
+    DEPENDENCIES
+        CIFuzzTestHelpers
+        iked-shared
+        compat
+)
+
+AddFuzzTarget(
+    TARGET_NAME
         vroute_getaddr
     SOURCES
         vroute_getaddr.c

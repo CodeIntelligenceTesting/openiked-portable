@@ -76,6 +76,17 @@ AddFuzzTarget(
 
 AddFuzzTarget(
     TARGET_NAME
+        parent_reload
+    SOURCES
+        parent_reload.c
+    DEPENDENCIES
+        CIFuzzTestHelpers
+        iked-shared
+        compat
+)
+
+AddFuzzTarget(
+    TARGET_NAME
         vroute_getaddr
     SOURCES
         vroute_getaddr.c

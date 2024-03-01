@@ -449,6 +449,6 @@ if(CLUSTERFUZZ)
 		target_compile_options(compat PUBLIC -fsanitize=fuzzer-no-link)
 		target_link_options(compat PUBLIC -fsanitize=fuzzer-no-link)
 	endif()
-	add_subdirectory(regress/new-fuzzer)
+	add_subdirectory(regress/cifuzz)
 endif()
 

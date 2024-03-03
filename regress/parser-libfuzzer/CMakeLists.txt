@@ -43,6 +43,6 @@ if(CIFUZZ_TESTING)
 		PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../iked
 	)
 	target_link_libraries(test_cifuzz
-		PRIVATE event crypto ssl compat iked-shared
+		PRIVATE libevent::core OpenSSL::Crypto OpenSSL::SSL compat iked-shared
 	)
 endif(CIFUZZ_TESTING)

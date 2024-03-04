@@ -14,6 +14,84 @@
 #include "iked_env.h"
 #include "vroute_cleanup_leaked_sockets.h"
 
+int
+parent_configure(struct iked *env)
+{
+	struct sockaddr_storage	 ss;
+
+	if (parse_config(env->sc_conffile, env) == -1) {
+		proc_kill(&env->sc_ps);
+		exit(1);
+	}
+
+	if (env->sc_opts & IKED_OPT_NOACTION) {
+		fprintf(stderr, "configuration OK\n");
+		proc_kill(&env->sc_ps);
+		exit(0);
+	}
+
+	env->sc_pfkey = -1;
+	config_setpfkey(env);
+
+	/* Send private and public keys to cert after forking the children */
+	if (config_setkeys(env) == -1)
+		fatalx("%s: failed to send keys", __func__);
+	config_setreset(env, RESET_CA, PROC_CERT);
+
+	/* Now compile the policies and calculate skip steps */
+	config_setcompile(env, PROC_IKEV2);
+
+	bzero(&ss, sizeof(ss));
+	ss.ss_family = AF_INET;
+
+#ifdef __APPLE__
+	int nattport = env->sc_nattport;
+	sysctlbyname("net.inet.ipsec.esp_port", NULL, NULL, &nattport, sizeof(nattport));
+#endif
+
+	/* see comment on config_setsocket() */
+	if (env->sc_nattmode != NATT_FORCE)
+		config_setsocket(env, &ss, htons(IKED_IKE_PORT), PROC_IKEV2, 0);
+	if (env->sc_nattmode != NATT_DISABLE)
+		config_setsocket(env, &ss, htons(env->sc_nattport), PROC_IKEV2, 1);
+
+	bzero(&ss, sizeof(ss));
+	ss.ss_family = AF_INET6;
+
+	if (env->sc_nattmode != NATT_FORCE)
+		config_setsocket(env, &ss, htons(IKED_IKE_PORT), PROC_IKEV2, 0);
+	if (env->sc_nattmode != NATT_DISABLE)
+		config_setsocket(env, &ss, htons(env->sc_nattport), PROC_IKEV2, 1);
+
+	/*
+	 * pledge in the parent process:
+	 * It has to run fairly late to allow forking the processes and
+	 * opening the PFKEY socket and the listening UDP sockets (once)
+	 * that need the bypass ioctls that are never allowed by pledge.
+	 *
+	 * Other flags:
+	 * stdio - for malloc and basic I/O including events.
+	 * rpath - for reload to open and read the configuration files.
+	 * proc - run kill to terminate its children safely.
+	 * dns - for reload and ocsp connect.
+	 * inet - for ocsp connect.
+	 * route - for using interfaces in iked.conf (SIOCGIFGMEMB)
+	 * wroute - for adding and removing addresses (SIOCAIFGMEMB)
+	 * sendfd - for ocsp sockets.
+	 */
+	if (pledge("stdio rpath proc dns inet route wroute sendfd", NULL) == -1)
+		fatal("pledge");
+
+	config_setstatic(env);
+	config_setcoupled(env, env->sc_decoupled ? 0 : 1);
+	config_setocsp(env);
+	config_setcertpartialchain(env);
+	/* Must be last */
+	config_setmode(env, env->sc_passive ? 1 : 0);
+
+	return (0);
+}
+
 struct iked *create_iked_env()
 {
     struct iked *env = malloc(sizeof(struct iked));
@@ -97,13 +175,22 @@ struct iked *create_iked_env()
     vroute_init(env);
 #endif
 
-#if 0
+    strcpy(env->sc_conffile, "iked.conf");
     /*
      * might have to stub parent_configure
      */
+    /*
+     * Need to drop non-owner read bits
+     * https://github.com/openiked/openiked-portable/blob/a0fc2e0d629a081b170adabc8d092653b07f1d4a/iked/parse.y#L1713
+     */
+    int mode = chmod(env->sc_conffile, S_IRUSR);
+    assert(mode == 0);
+
+
+
     if (parent_configure(env) == -1)
         fatalx("configuration failed");
-
+#if 0
     event_dispatch();
 #endif
 

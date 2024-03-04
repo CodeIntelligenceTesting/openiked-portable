@@ -16,6 +16,7 @@ include(CheckFunctionExists)
 include(CheckLibraryExists)
 include(CheckSymbolExists)
 include(CheckIncludeFiles)
+include(GNUInstallDirs)
 
 set(VERSIONED_FILES)
 list(APPEND VERSIONED_FILES iked.c)
@@ -42,63 +43,58 @@ list(APPEND CFLAGS
 	"$<$<CONFIG:DEBUG>:-O0;-g>"
 )
 
-set(INC_DIRS
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}/../iked
-)
-
-add_library(iked-shared OBJECT
+add_library(iked-shared STATIC
+	ca.c
+	chap_ms.c
+	control.c
+	config.c
+	crypto.c
+	crypto_hash.c
+	dh.c
+	eap.c
+	ikev2.c
+	ikev2_msg.c
 	ikev2_pld.c
 	imsg_util.c
 	log.c
-	util.c
-	${CMAKE_CURRENT_BINARY_DIR}/ikev2_map.c
-	${CMAKE_CURRENT_BINARY_DIR}/eap_map.c
-)
-
-if(CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
-	list(APPEND SRCS ipsec.c pfkey.c)
-elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
-	list(APPEND SRCS ipsec.c pfkey.c)
-elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-	list(APPEND SRCS ipsec.c pfkey.c)
-elseif(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
-	list(APPEND SRCS ipsec.c pfkey.c)
-elseif(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
-	list(APPEND SRCS ipsec.c pfkey.c)
-endif()
-if(HAVE_VROUTE)
-	list(APPEND SRCS vroute.c)
-endif()
-if(HAVE_VROUTE_NETLINK)
-	list(APPEND SRCS vroute-netlink.c)
-endif()
-if (WITH_APPARMOR)
-	list(APPEND SRCS apparmor.c)
-endif()
-
-list(APPEND SRCS
-	ca.c
-	chap_ms.c
-	config.c
-	control.c
-	crypto.c
-	dh.c
-	eap.c
-	iked.c
-	ikev2.c
-	ikev2.h
-	ikev2_msg.c
 	ocsp.c
 	policy.c
 	print.c
 	proc.c
 	smult_curve25519_ref.c
-	timer.c
-	crypto_hash.c
 	sntrup761.c
+	timer.c
+	util.c
 	# Generated files
+	${CMAKE_CURRENT_BINARY_DIR}/ikev2_map.c
+	${CMAKE_CURRENT_BINARY_DIR}/eap_map.c
 	${CMAKE_CURRENT_BINARY_DIR}/parse.c
+)
+
+if(CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
+	target_sources(iked-shared PRIVATE ipsec.c pfkey.c)
+elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
+	target_sources(iked-shared PRIVATE ipsec.c pfkey.c)
+elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	target_sources(iked-shared PRIVATE ipsec.c pfkey.c)
+elseif(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+	target_sources(iked-shared PRIVATE ipsec.c pfkey.c)
+elseif(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
+	target_sources(iked-shared PRIVATE ipsec.c pfkey.c)
+endif()
+if(HAVE_VROUTE)
+	target_sources(iked-shared PRIVATE vroute.c)
+endif()
+if(HAVE_VROUTE_NETLINK)
+	target_sources(iked-shared PRIVATE vroute-netlink.c)
+endif()
+if (WITH_APPARMOR)
+	target_sources(iked-shared PRIVATE apparmor.c)
+endif()
+
+list(APPEND SRCS
+	iked.c
+	ikev2.h
 )
 
 add_executable(iked ${SRCS})
@@ -109,27 +105,17 @@ if(HAVE_LD_Z)
 	target_link_options(iked PRIVATE "LINKER:-z,relro,-z,now")
 endif()
 
-target_include_directories(iked PRIVATE ${INC_DIRS})
-target_include_directories(iked-shared PRIVATE ${INC_DIRS})
+target_include_directories(iked-shared PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries(iked-shared PUBLIC libevent::core OpenSSL::SSL OpenSSL::Crypto compat)
 
 if(DEFINED ENV{CLUSTERFUZZLITE})
-	target_link_libraries(iked-shared
-        	"-lm -Wl,-Bstatic -lssl -lcrypto -levent -Wl,-Bdynamic" compat
-	)
+	target_link_libraries(iked-shared PUBLIC "-lm")
 else()
-	target_link_libraries(iked-shared
-		PRIVATE util event crypto ssl compat
-	)
+	target_link_libraries(iked-shared PRIVATE util)
 endif()
 
-list(APPEND LIBS
-	util
-	event
-	crypto
-	ssl
-	compat
-	iked-shared
-)
+list(APPEND LIBS iked-shared)
 
 if (WITH_SYSTEMD)
 	list(APPEND LIBS systemd)

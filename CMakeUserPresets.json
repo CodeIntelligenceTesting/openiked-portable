@@ -1,0 +1,66 @@
+ 
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "dev-base",
+      "inherits": ["base"],
+      "cacheVariables": {
+        "CMAKE_VERBOSE_MAKEFILE": "On",
+        "FUZZER_RUN_JOBS": "16",
+        "FUZZER_RUN_WORKERS": "16",
+        "FUZZER_RUN_TIME_IN_SECONDS": "10"
+      },
+      "hidden": true
+    },
+    {
+      "name": "dev-x64-freebsd-llvm17-debug",
+      "inherits": [ "dev-base", "make", "x64-freebsd", "llvm17", "debug", "clangd", "coverage" ]
+    },
+    {
+      "name": "dev-x64-freebsd-llvm17-release",
+      "inherits": [ "dev-base", "make", "x64-freebsd", "llvm17", "release", "clangd" ]
+    },
+    {
+      "name": "dev-x64-windows-llvm-debug",
+      "inherits": [ "dev-base", "vs2022", "x64-windows", "llvm-cl", "debug" ]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "dev-x64-freebsd-llvm17-debug",
+      "configurePreset": "dev-x64-freebsd-llvm17-debug",
+      "configuration": "Debug",
+      "inherits": [ "freebsd" ]
+    },
+    {
+      "name": "dev-x64-freebsd-llvm17-release",
+      "configurePreset": "dev-x64-freebsd-llvm17-release",
+      "configuration": "Release",
+      "inherits": [ "freebsd" ]
+    },
+    {
+      "name": "dev-x64-windows-llvm-debug",
+      "configurePreset": "dev-x64-windows-llvm-debug",
+      "configuration": "Debug",
+      "inherits": [ "windows" ]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "dev-x64-freebsd-llvm17-debug",
+      "configurePreset": "dev-x64-freebsd-llvm17-debug",
+      "inherits": [ "ci", "freebsd", "debug" ]
+    },
+    {
+      "name": "dev-x64-freebsd-llvm17-release",
+      "configurePreset": "dev-x64-freebsd-llvm17-release",
+      "inherits": [ "ci", "freebsd", "release" ]
+    }
+  ]
+}

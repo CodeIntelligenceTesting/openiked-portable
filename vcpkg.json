@@ -1,0 +1,16 @@
+{
+  "name": "openiked-portable",
+  "version-string": "7.3.9999",
+  "dependencies": [
+    {
+      "name": "openssl",
+      "features": [
+        "weak-ssl-ciphers",
+        "tools"
+      ]
+    },
+    {
+      "name": "libevent"
+    }
+  ]
+}

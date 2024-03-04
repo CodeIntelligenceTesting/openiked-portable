@@ -12,24 +12,8 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-set(SRCS)
-list(APPEND SRCS
-	dhtest.c
-	${CMAKE_CURRENT_SOURCE_DIR}/../../iked/crypto_hash.c
-	${CMAKE_CURRENT_SOURCE_DIR}/../../iked/dh.c
-	${CMAKE_CURRENT_SOURCE_DIR}/../../iked/smult_curve25519_ref.c
-	${CMAKE_CURRENT_SOURCE_DIR}/../../iked/sntrup761.c
-	${CMAKE_CURRENT_SOURCE_DIR}/../../iked/imsg_util.c
-)
+add_executable(dhtest)
+target_sources(dhtest PRIVATE dhtest.c)
+target_link_libraries(dhtest PRIVATE iked-shared compat)
 
-add_executable(dhtest ${SRCS})
-
-target_include_directories(dhtest
-	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../iked
-)
-
-target_link_libraries(dhtest
-	PRIVATE util crypto compat
-)
-
-target_compile_options(dhtest PRIVATE ${CFLAGS})
+add_test(NAME dhtest COMMAND dhtest)

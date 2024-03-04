@@ -97,7 +97,7 @@ list(APPEND CFLAGS
 )
 
 if(SRCS)
-	add_library(compat OBJECT ${SRCS})
+	add_library(compat STATIC ${SRCS})
 	target_compile_options(compat PRIVATE ${CFLAGS})
 	target_include_directories(compat PUBLIC .)
 else()

@@ -2,156 +2,72 @@ name: CMake
 
 on:
   push:
-    branches: [ master, ci ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
 
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-  CC: clang
+permissions:
+  contents: read
+  checks: write
+  id-token: write
 
 jobs:
-  ubuntu:
+  cmake_preset:
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     strategy:
+      fail-fast: false
       matrix:
-        os: [ ubuntu-latest, ubuntu-22.04 ]
-    runs-on: ${{ matrix.os }}
-    # env:
-    #   CFLAGS: -Werror
-
-    steps:
-    - uses: actions/checkout@v2
+        include:
+          - preset: gh-ubuntu-22.04-llvm14-debug
+            os: ubuntu-22.04
+          - preset: gh-ubuntu-22.04-llvm15-debug
+            os: ubuntu-22.04
+          - preset: ci-x64-freebsd-debug
+            os: FreeBSD13
     
-    - name: Install libevent
-      run: sudo apt install libevent-dev libsystemd-dev
-    
-    - name: Create Build Environment
-      # Some projects don't allow in-source building, so create a separate build directory
-      # We'll use this as our working directory for all subsequent commands
-      run: cmake -E make_directory ${{github.workspace}}/build
-
-    - name: Configure CMake
-      # Use a bash shell so we can use the same syntax for environment variable
-      # access regardless of the host operating system
-      shell: bash
-      working-directory: ${{github.workspace}}/build
-      # Note the current convention is to use the -S and -B options here to specify source 
-      # and build directories, but this is only available with CMake 3.13 and higher.  
-      # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-
-    - name: Build
-      working-directory: ${{github.workspace}}/build
-      shell: bash
-      # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE
-
-    - name: Test DH
-      working-directory: ${{github.workspace}}/build/regress/dh
-      shell: bash
-      run: ./dhtest
-
-    - name: Test Parser
-      working-directory: ${{github.workspace}}/build/regress/parser
-      shell: bash
-      run: ./test_parser
-
-  macos:
-    strategy:
-      matrix:
-        os: [ macos-latest ]
+    name: ${{ matrix.preset }}
     runs-on: ${{ matrix.os }}
-
     steps:
-    - uses: actions/checkout@v2
+    - name: Prepare ubuntu-22.04
+      if: ${{ matrix.os == 'ubuntu-22.04' }}
+      run: echo "needed?"
+    
+    - name: Prepare FreeBSD13
+      if: ${{ matrix.os == 'FreeBSD13' }}
+      run: |
+        pkg install -y bash cmake curl git ninja pkgconf zip unzip
+        pkg install -y autoconf autoconf-archive gmake
 
-    - name: Create Build Environment
-      run: cmake -E make_directory ${{github.workspace}}/build
-
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+    
     - name: Configure CMake
-      shell: bash
-      working-directory: ${{github.workspace}}/build
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: cmake --preset ${{ matrix.preset }}
 
     - name: Build
-      working-directory: ${{github.workspace}}/build
-      shell: bash
-      run: cmake --build . --config $BUILD_TYPE
+      run: cmake --build --preset ${{ matrix.preset }}
+    
+    - name: Run Tests
+      run: ctest --preset ${{ matrix.preset }}
 
-    - name: Test DH
-      working-directory: ${{github.workspace}}/build/regress/dh
-      shell: bash
-      run: ./dhtest
-
-    - name: Test Parser
-      working-directory: ${{github.workspace}}/build/regress/parser
-      shell: bash
-      run: ./test_parser
-
-  openbsd:
-    runs-on: macos-12
-    steps:
-    - name: Bootstrap OpenBSD-latest
-      uses: mario-campos/emulate@v1
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v4
+      if: success() || failure() # always run even if the previous step fails
       with:
-        operating-system: openbsd-latest
+        check_name: "Test Report for ${{ matrix.preset }}"
+        annotate_notice: true
+        detailed_summary: true
+        include_passed: true
+        report_paths: build/ctest-${{matrix.preset}}.junit.xml
 
-    - name: Install Dependencies
-      run: pkg_add cmake git
-
-    - name: Build
-      run: |
-        git clone --depth=1 https://github.com/openiked/openiked-portable.git
-        cd openiked-portable
-        [ "${{ github.event.pull_request.number }}" = "" ] || (echo "fetching PR ${{ github.event.pull_request.number }}"; git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-${{ github.event.pull_request.number }} && git checkout "pr-${{ github.event.pull_request.number }}")
-        mkdir build; cd build
-        cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-        make
-        cd regress/dh; ./dhtest
-        cd ../parser; ./test_parser
-
-  freebsd:
-    runs-on: macos-12
-    steps:
-    - name: Bootstrap FreeBSD-latest
-      uses: mario-campos/emulate@v1
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v4
+      if: success() || failure()
       with:
-        operating-system: freebsd-latest
-
-    - name: Install Dependencies
-      run: pkg install -y cmake libevent git
-
-    - name: Build
-      run: |
-        git clone --depth=1 https://github.com/openiked/openiked-portable.git
-        cd openiked-portable
-        [ "${{ github.event.pull_request.number }}" = "" ] || (echo "fetching PR ${{ github.event.pull_request.number }}"; git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-${{ github.event.pull_request.number }} && git checkout "pr-${{ github.event.pull_request.number }}")
-        mkdir build; cd build
-        cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-        make
-        cd regress/dh; ./dhtest
-        cd ../parser; ./test_parser
-
-  netbsd:
-    runs-on: macos-12
-    steps:
-    - name: Bootstrap NetBSD-latest
-      uses: mario-campos/emulate@v1
-      with:
-        operating-system: netbsd-latest
-
-    - name: Build
-      run: |
-        git clone --depth=1 https://github.com/openiked/openiked-portable.git
-        cd openiked-portable
-        [ "${{ github.event.pull_request.number }}" = "" ] || (echo "fetching PR ${{ github.event.pull_request.number }}"; git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-${{ github.event.pull_request.number }} && git checkout "pr-${{ github.event.pull_request.number }}")
-        mkdir build; cd build
-        cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-        make
-        cd regress/dh; ./dhtest
-        cd ../parser; ./test_parser
+        name: ${{ matrix.preset }}
+        path: |
+          build/ctest-${{matrix.preset}}.junit.xml
+          build/**/coverage/**/*

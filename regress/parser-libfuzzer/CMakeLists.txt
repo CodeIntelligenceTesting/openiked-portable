@@ -20,24 +20,15 @@ list(APPEND SRCS
 	test_parser_fuzz.c
 )
 
-set(CMAKE_C_COMPILER clang)
 add_executable(test_libfuzzer ${SRCS})
-
-target_include_directories(test_libfuzzer
-	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../iked
-)
 
 # when using clusterfuzz we need static linking and clusterfuzz' compiler arguments
 if (DEFINED ENV{CLUSTERFUZZLITE})
-	target_link_libraries(test_libfuzzer
-		"-lm -Wl,-Bstatic -lssl -lcrypto -levent" compat iked-shared $ENV{LIB_FUZZING_ENGINE}
-	)
+	target_link_libraries(test_libfuzzer "-lm" iked-shared $ENV{LIB_FUZZING_ENGINE})
 else()
 	string(APPEND CMAKE_C_FLAGS " -fsanitize=fuzzer")
 	string(APPEND CMAKE_EXE_LINKER_FLAGS " -fsanitize=fuzzer")
-	target_link_libraries(test_libfuzzer
-		PRIVATE event crypto ssl compat iked-shared
-	)
+	target_link_libraries(test_libfuzzer PRIVATE iked-shared)
 	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/corpus)
 	configure_file(run_test.sh run_test.sh COPYONLY)
 	configure_file(test_libfuzzer.dict fuzz.dict COPYONLY)
@@ -45,11 +36,13 @@ endif()
 
 target_compile_options(test_libfuzzer PRIVATE ${CFLAGS})
 
-# add cifuzz fuzz target
-add_fuzz_test(test_cifuzz test_cifuzz.c common.c)
-target_include_directories(test_cifuzz
-	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../iked
-)
-target_link_libraries(test_cifuzz
-	PRIVATE event crypto ssl compat iked-shared
-)
+if(CIFUZZ_TESTING)
+	# add cifuzz fuzz target
+	add_fuzz_test(test_cifuzz test_cifuzz.c common.c)
+	target_include_directories(test_cifuzz
+		PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../iked
+	)
+	target_link_libraries(test_cifuzz
+		PRIVATE libevent::core OpenSSL::Crypto OpenSSL::SSL compat iked-shared
+	)
+endif(CIFUZZ_TESTING)

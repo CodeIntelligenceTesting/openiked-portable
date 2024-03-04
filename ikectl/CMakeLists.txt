@@ -54,7 +54,7 @@ target_include_directories(ikectl
 )
 
 target_link_libraries(ikectl
-	PRIVATE util event crypto ssl compat
+	PRIVATE util libevent::core OpenSSL::SSL OpenSSL::Crypto compat
 )
 
 install(TARGETS ikectl RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR})

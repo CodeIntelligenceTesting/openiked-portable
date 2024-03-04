@@ -60,8 +60,6 @@ int	 parent_dispatch_control(int, struct privsep_proc *, struct imsg *);
 int	 parent_dispatch_ikev2(int, struct privsep_proc *, struct imsg *);
 int	 parent_configure(struct iked *);
 
-struct iked	*iked_env;
-
 static struct privsep_proc procs[] = {
 	{ "ca",		PROC_CERT,	parent_dispatch_ca, caproc, IKED_CA },
 	{ "control",	PROC_CONTROL,	parent_dispatch_control, control },

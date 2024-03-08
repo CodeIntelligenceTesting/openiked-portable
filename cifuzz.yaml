@@ -48,7 +48,7 @@
 #server: https://app.code-intelligence.com
 
 ## Set the project name on CI Sense.
-#project: my-project-1a2b3c4d
+project: prj-71Jsw2F9qQ8u
 
 ## Set the container registry to upload fuzz containers to.
 # registry: registry.example.org/my-org/my-project

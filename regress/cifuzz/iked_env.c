@@ -190,10 +190,9 @@ struct iked *create_iked_env()
     assert(mode == 0);
 
 
-
+#if 0
     if (parent_configure(env) == -1)
         fatalx("configuration failed");
-#if 0
     event_dispatch();
 #endif
 

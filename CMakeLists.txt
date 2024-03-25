@@ -15,6 +15,8 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(openiked)
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 enable_testing()
 
 option(ASAN "Enable Address Sanitation" OFF)
@@ -30,6 +32,7 @@ include(CheckSymbolExists)
 include(CheckIncludeFiles)
 include(CheckCCompilerFlag)
 include(CheckLinkerFlag)
+include(AddFuzzTest)
 
 if (CIFUZZ_TESTING)
 	find_package(cifuzz NO_SYSTEM_ENVIRONMENT_PATH)

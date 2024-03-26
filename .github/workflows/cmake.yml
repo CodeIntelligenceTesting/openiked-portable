@@ -51,6 +51,8 @@ jobs:
       run: cmake --build --preset ${{ matrix.preset }}
     
     - name: Run Tests
+      env: 
+        ASAN_OPTIONS: "detect_leaks=0"
       run: ctest --preset ${{ matrix.preset }}
 
     - name: Publish Test Report

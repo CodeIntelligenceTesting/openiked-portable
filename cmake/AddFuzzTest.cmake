@@ -1,7 +1,7 @@
 include_guard()
 
 function(AddFuzzTarget)
-	set(options)
+	set(options FUZZER_NO_MAIN)
 	set(oneValueArgs TARGET_NAME)
 	set(multiValueArgs SOURCES DEPENDENCIES)
 
@@ -34,4 +34,8 @@ function(AddFuzzTarget)
 		    set_tests_properties(${params_TARGET_NAME}/generateCoverageHtml  PROPERTIES DEPENDS ${params_TARGET_NAME}/mergeCoverageData)
         endif(COVERAGE_REPORT)
     endif(CIFUZZ_TESTING)
+
+    if (NOT params_FUZZER_NO_MAIN)
+        target_link_options(${params_TARGET_NAME} PRIVATE -fsanitize=fuzzer)
+    endif ()
 endfunction(AddFuzzTarget)

@@ -55,11 +55,11 @@ void setup()
     printf("%s:%d: Spawning fuzzer thread...\n", __FILE__, __LINE__);
     int created = pthread_create(&g_fuzzer_thread, NULL, &fuzzerThreadMain, NULL);
     assert(created == 0);
+    int detached = pthread_detach(&g_fuzzer_thread);
+    assert(detached == 0);
 }
 
 void cleanup()
 {
-    void *junk;
-    pthread_join(&g_fuzzer_thread, &junk);
-    printf("%s:%d: Joined with fuzzer thread.\n", __FILE__, __LINE__);
+    printf("%s:%d: cleanup.\n", __FILE__, __LINE__);
 }

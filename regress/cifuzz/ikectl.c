@@ -11,6 +11,9 @@ extern int main(int argsc, char **argsv);
 extern int LLVMFuzzerRunDriver(int *argc, char ***argv,
                   int (*UserCb)(const uint8_t *Data, size_t Size));
 
+int LLVMFuzzerInitialize(int *argc, char ***argv);
+int LLVMFuzzerTestOneInput(size_t nmemb, uint8_t *data);
+
 static void setup() __attribute__ ((constructor));
 static void cleanup() __attribute__ ((destructor));
 static pthread_t g_fuzzer_thread;

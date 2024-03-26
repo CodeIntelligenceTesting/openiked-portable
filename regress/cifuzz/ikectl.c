@@ -12,7 +12,7 @@ extern int LLVMFuzzerRunDriver(int *argc, char ***argv,
                   int (*UserCb)(const uint8_t *Data, size_t Size));
 
 int LLVMFuzzerInitialize(int *argc, char ***argv);
-int LLVMFuzzerTestOneInput(size_t nmemb, uint8_t *data);
+int LLVMFuzzerTestOneInput(uint8_t *data, size_t nmemb);
 
 static void setup() __attribute__ ((constructor));
 static void cleanup() __attribute__ ((destructor));
@@ -37,7 +37,7 @@ void *fuzzerThreadMain(void *)
 {
     printf("%s:%d: Fuzzer thread spawned.\n", __FILE__, __LINE__);
 
-    char *args[] = {
+    char **args = {
         "fuzzer",
         "-runs=1",
         NULL
@@ -74,7 +74,7 @@ int LLVMFuzzerInitialize(int *argc, char ***argv)
     return 0;
 }
 
-int LLVMFuzzerTestOneInput(size_t nmemb, uint8_t *data)
+int LLVMFuzzerTestOneInput(uint8_t *data, size_t nmemb)
 {
     return 0;
 }

@@ -35,7 +35,7 @@ function(AddFuzzTarget)
         endif(COVERAGE_REPORT)
     endif(CIFUZZ_TESTING)
 
-    if (NOT params_FUZZER_NO_MAIN)
+    if (NOT ${params_FUZZER_NO_MAIN})
         target_link_options(${params_TARGET_NAME} PRIVATE -fsanitize=fuzzer)
     endif ()
 endfunction(AddFuzzTarget)

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 
 extern int main(int argsc, char **argsv);

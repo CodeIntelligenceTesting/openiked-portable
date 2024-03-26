@@ -75,3 +75,4 @@ int LLVMFuzzerTestOneInput(size_t nmemb, uint8_t *data)
 {
     return 0;
 }
+

@@ -17,10 +17,12 @@ static pthread_t g_fuzzer_thread;
 
 int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
+    return 0;
 }
 
-void LLVMFuzzerTestOneInput(size_t nmemb, uint8_t *data)
+int LLVMFuzzerTestOneInput(size_t nmemb, uint8_t *data)
 {
+    return 0;
 }
 
 void blockSignals()
@@ -38,12 +40,14 @@ void blockSignals()
     assert(retval == 0);
 }
 
-void fuzzerThreadMain(void *args)
+void *fuzzerThreadMain(void *args)
 {
     printf("%s:%d: Fuzzer thread spawned.\n", __FILE__, __LINE__);
 
     blockSignals();
     printf("%s:%d: Fuzzer thread now blocking signals.\n", __FILE__, __LINE__);
+
+    return NULL;
 }
 
 void setup()

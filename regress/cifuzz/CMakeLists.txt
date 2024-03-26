@@ -64,7 +64,7 @@ AddFuzzTarget(
 
 AddFuzzTarget(
     TARGET_NAME
-        ikectl
+        ikectl_fuzzer
     SOURCES
         ikectl.c
         ${openiked}/iked/iked.c

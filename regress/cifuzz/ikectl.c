@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 extern int main(int argsc, char **argsv);
 extern int LLVMFuzzerRunDriver(int *argc, char ***argv,
                   int (*UserCb)(const uint8_t *Data, size_t Size));

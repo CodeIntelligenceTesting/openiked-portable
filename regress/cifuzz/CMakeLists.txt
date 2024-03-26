@@ -67,7 +67,7 @@ AddFuzzTarget(
         ikectl_fuzzer
     SOURCES
         ikectl.c
-        ${openiked}/iked/iked.c
+        ${openiked_SOURCE_DIR}/iked/iked.c
     DEPENDENCIES
         CIFuzzTestHelpers
         iked-shared

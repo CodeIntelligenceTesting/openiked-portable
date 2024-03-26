@@ -37,7 +37,7 @@ void *fuzzerThreadMain(void *)
 {
     printf("%s:%d: Fuzzer thread spawned.\n", __FILE__, __LINE__);
 
-    char **args = {
+    char *args[] = {
         "fuzzer",
         "-runs=1",
         NULL

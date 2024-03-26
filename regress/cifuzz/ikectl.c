@@ -30,7 +30,7 @@ void blockSignals()
     assert(retval == 0);
 }
 
-void *fuzzerThreadMain(void *args)
+void *fuzzerThreadMain(void *)
 {
     printf("%s:%d: Fuzzer thread spawned.\n", __FILE__, __LINE__);
 

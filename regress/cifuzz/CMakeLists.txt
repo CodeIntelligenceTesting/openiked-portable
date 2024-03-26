@@ -61,3 +61,15 @@ AddFuzzTarget(
         iked-shared
         compat
 )
+
+AddFuzzTarget(
+    TARGET_NAME
+        ikectl
+    SOURCES
+        ikectl.c
+        ${openiked}/iked/iked.c
+    DEPENDENCIES
+        CIFuzzTestHelpers
+        iked-shared
+        compat
+)

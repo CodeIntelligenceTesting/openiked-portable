@@ -43,7 +43,7 @@ void *fuzzerThreadMain(void *)
         NULL
     };
     int argsc = sizeof(args)/sizeof(args[0]);
-    LLVMFuzzerRunDriver(&argsc, &argsc, LLVMFuzzerTestOneInput);
+    LLVMFuzzerRunDriver(&argsc, &args, LLVMFuzzerTestOneInput);
 
     return NULL;
 }

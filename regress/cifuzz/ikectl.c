@@ -12,7 +12,7 @@ extern int LLVMFuzzerRunDriver(int *argc, char ***argv,
                   int (*UserCb)(const uint8_t *Data, size_t Size));
 
 int LLVMFuzzerInitialize(int *argc, char ***argv);
-int LLVMFuzzerTestOneInput(uint8_t *data, size_t nmemb);
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t nmemb);
 
 static void setup() __attribute__ ((constructor));
 static void cleanup() __attribute__ ((destructor));
@@ -43,7 +43,7 @@ void *fuzzerThreadMain(void *)
         NULL
     };
     int argsc = sizeof(args)/sizeof(args[0]);
-    LLVMFuzzerRunDriver(&argsc, &args, LLVMFuzzerTestOneInput);
+    LLVMFuzzerRunDriver(&argsc, &args, &LLVMFuzzerTestOneInput);
 
     return NULL;
 }
@@ -74,7 +74,7 @@ int LLVMFuzzerInitialize(int *argc, char ***argv)
     return 0;
 }
 
-int LLVMFuzzerTestOneInput(uint8_t *data, size_t nmemb)
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t nmemb)
 {
     return 0;
 }

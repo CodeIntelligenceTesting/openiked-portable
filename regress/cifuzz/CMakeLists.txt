@@ -1,5 +1,7 @@
 project(CIFuzzTargets)
 
+configure_file(iked.conf.in iked.conf COPYONLY)
+
 add_library(CIFuzzTestHelpers)
 target_sources(CIFuzzTestHelpers PRIVATE ca.c fuzzdataprovider.c iked_env.c)
 #

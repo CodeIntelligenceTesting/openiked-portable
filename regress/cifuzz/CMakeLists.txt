@@ -68,6 +68,7 @@ AddFuzzTarget(
         ikectl_fuzzer
     SOURCES
         ikectl.c
+        ikectl_fuzzer.cpp
         ikectl_fuzzer_impl.cpp
         ${openiked_SOURCE_DIR}/iked/iked.c
     DEPENDENCIES

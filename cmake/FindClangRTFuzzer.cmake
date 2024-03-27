@@ -8,7 +8,6 @@ foreach(clang_rt_lib IN LISTS CLANG_RT_LIBS)
 endforeach()
 list(SORT clang_rt_paths)
 list(REMOVE_DUPLICATES clang_rt_paths)
-message(STATUS "libclang_rt in ${clang_rt_paths}")
 
 find_library(clang_rt_fuzzer_lib
   NAMES
@@ -20,7 +19,13 @@ find_library(clang_rt_fuzzer_lib
 )
 
 add_library(unofficial::clang_rt::fuzzer UNKNOWN IMPORTED)
-set_target_properties(unofficial::clang_rt::fuzzer PROPERTIES IMPORTED_LOCATION "${clang_rt_fuzzer_lib}")
+set_target_properties(unofficial::clang_rt::fuzzer
+  PROPERTIES
+    IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
+    IMPORTED_LOCATION "${clang_rt_fuzzer_lib}"
+)
+
+message(STATUS "libclang_rt.fuzzer.a in ${clang_rt_fuzzer_lib}")
 
 include(FeatureSummary)
 set_package_properties(unofficial::clang_rt::fuzzer PROPERTIES

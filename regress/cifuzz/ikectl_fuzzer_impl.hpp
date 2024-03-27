@@ -17,6 +17,6 @@ protected:
     struct parse_result *parse(int argsc, char **argsv);
 
     void err(int exit_code, const char *fmt, ...);
-    void connectHelper(const char *sock, struct parse_result *res);
+    void connectHelper(const char *sock);
     void reconnectHelper(const char *sock, struct sockaddr_un &s_un);
 };

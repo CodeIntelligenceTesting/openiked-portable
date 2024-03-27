@@ -21,8 +21,8 @@ struct IkedControlFuzzer
     ~IkedControlFuzzer();
 
     static void err(int exit_code, const char *fmt, ...);
-    static int  connect(const char *sock, struct parse_result *res);
-    static void reconnect(int ctl_sock, struct sockaddr_un &s_un, struct parse_result *res);
+    static int  connectHelper(const char *sock, struct parse_result *res);
+    static void reconnectHelper(const char *sock, struct parse_result *res, int ctl_sock, struct sockaddr_un &s_un);
 
 protected:
     struct parse_result	*res;
@@ -34,8 +34,8 @@ protected:
 };
 
 IkedControlFuzzer::IkedControlFuzzer()
-    : m_res(parse(0, NULL))
-    , ctl_sock()
+    : res(parse(0, NULL))
+    , ctl_sock(connectHelper())
 {
 }
 
@@ -55,7 +55,7 @@ struct parse_result *IkedControlFuzzer::parse(int argsc, char **argsv)
 /*
  * From https://github.com/openiked/openiked-portable/blob/6d5b015f50301ffb1800f36f636b953a714c9e62/ikectl/ikectl.c#L227
  */
-int IkedControlFuzzer::connect(const char *sock, struct parse_result *res)
+int IkedControlFuzzer::connectHelper(const char *sock, struct parse_result *res)
 {
     struct sockaddr_un s_un;
     int ctl_sock;
@@ -67,20 +67,20 @@ int IkedControlFuzzer::connect(const char *sock, struct parse_result *res)
 	s_un.sun_family = AF_UNIX;
 	strlcpy(s_un.sun_path, sock, sizeof(s_un.sun_path));
 
-    reconnect(ctl_sock, s_un, res);
+    reconnectHelper(sock, res, ctl_sock, s_un);
 }
 
 /*
  * From https://github.com/openiked/openiked-portable/blob/6d5b015f50301ffb1800f36f636b953a714c9e62/ikectl/ikectl.c#L235
  */
-void IkedControlFuzzer::reconnect(int ctl_sock, struct sockaddr_un &s_un, struct parse_result *res)
+void IkedControlFuzzer::reconnectHelper(const char *sock, struct parse_result *res,  int ctl_sock, struct sockaddr_un &s_un)
 {
     if (connect(ctl_sock, (struct sockaddr *)&s_un, sizeof(s_un)) == -1) {
 		/* Keep retrying if running in monitor mode */
 		if ( res->action == MONITOR &&
 		    (errno == ENOENT || errno == ECONNREFUSED)) {
 			usleep(100);
-			reconnect(ctl_sock, s_un);
+			reconnectHelper(ctl_sock, s_un);
 		}
 		err(1, "connect: %s", sock);
 	}

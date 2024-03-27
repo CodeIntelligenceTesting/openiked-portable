@@ -19,14 +19,17 @@
 
 IkedControlFuzzer::IkedControlFuzzer()
     : res(parse(0, NULL))
-    , ctl_sock(connectHelper(IKED_SOCKET, res))
+    , ctl_sock(-1)
 {
+    connectHelper(IKED_SOCKET);
 }
 
 IkedControlFuzzer::~IkedControlFuzzer()
 {
-    close(ctl_sock);
-    ctl_sock = -1;
+    if (ctl_sock != -1) {
+        close(ctl_sock);
+        ctl_sock = -1;
+    }
 }
 
 /*
@@ -59,10 +62,9 @@ void IkedControlFuzzer::err(int exit_code, const char *fmt, ...)
 /*
  * From https://github.com/openiked/openiked-portable/blob/6d5b015f50301ffb1800f36f636b953a714c9e62/ikectl/ikectl.c#L227
  */
-int IkedControlFuzzer::connectHelper(const char *sock, struct parse_result *res)
+void IkedControlFuzzer::connectHelper(const char *sock)
 {
     struct sockaddr_un s_un;
-    int ctl_sock;
 
     if ((ctl_sock = socket(AF_UNIX, SOCK_STREAM, 0)) == -1)
 		err(1, "socket");
@@ -71,23 +73,21 @@ int IkedControlFuzzer::connectHelper(const char *sock, struct parse_result *res)
 	s_un.sun_family = AF_UNIX;
 	strlcpy(s_un.sun_path, sock, sizeof(s_un.sun_path));
 
-    reconnectHelper(sock, res, ctl_sock, s_un);
-
-    return ctl_sock;
+    reconnectHelper(sock, s_un);
 }
 
 /*
- * From https://github.com/openiked/openiked-portable/blob/6d5b015f50301ffb1800f36f636b953a714c9e62/ikectl/ikectl.c#L235
+ * Mimic goto-loop of https://github.com/openiked/openiked-portable/blob/6d5b015f50301ffb1800f36f636b953a714c9e62/ikectl/ikectl.c#L235
  */
-void IkedControlFuzzer::reconnectHelper(const char *sock, struct parse_result *res,  int ctl_sock, struct sockaddr_un &s_un)
+void IkedControlFuzzer::reconnectHelper(const char *sock struct sockaddr_un &s_un)
 {
-    if (connect(ctl_sock, (struct sockaddr *)&s_un, sizeof(s_un)) == -1) {
+    while (connect(ctl_sock, (struct sockaddr *)&s_un, sizeof(s_un)) == -1) {
 		/* Keep retrying if running in monitor mode */
 		if ( res->action == MONITOR &&
 		    (errno == ENOENT || errno == ECONNREFUSED)) {
 			usleep(100);
-			reconnectHelper(sock, res, ctl_sock, s_un);
-		}
-		err(1, "connect: %s", sock);
+		} else {
+		    err(1, "connect: %s", sock);
+        }
 	}
 }

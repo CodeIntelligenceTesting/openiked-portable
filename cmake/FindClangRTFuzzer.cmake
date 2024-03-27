@@ -18,7 +18,7 @@ find_library(clang_rt_fuzzer_lib
   REQUIRED
 )
 
-add_library(unofficial::clang_rt::fuzzer UNKNOWN IMPORTED)
+add_library(unofficial::clang_rt::fuzzer STATIC IMPORTED)
 set_target_properties(unofficial::clang_rt::fuzzer
   PROPERTIES
     IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"

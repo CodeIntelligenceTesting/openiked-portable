@@ -79,7 +79,7 @@ void IkedControlFuzzer::connectHelper(const char *sock)
 /*
  * Mimic goto-loop of https://github.com/openiked/openiked-portable/blob/6d5b015f50301ffb1800f36f636b953a714c9e62/ikectl/ikectl.c#L235
  */
-void IkedControlFuzzer::reconnectHelper(const char *sock struct sockaddr_un &s_un)
+void IkedControlFuzzer::reconnectHelper(const char *sock, struct sockaddr_un &s_un)
 {
     while (connect(ctl_sock, (struct sockaddr *)&s_un, sizeof(s_un)) == -1) {
 		/* Keep retrying if running in monitor mode */

@@ -8,10 +8,12 @@
 #include <unistd.h>
 
 #include <cstdarg>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <exception>
 #include <stdexcept>
+#include <string>
 
 #include "../../ikectl/parser.h"
 #include "../../iked/types.h"
@@ -51,6 +53,20 @@ struct parse_result *IkedControlFuzzer::parse(int argsc, char **argsv)
     memset(&m_res_storage, 0, sizeof(m_res_storage));
     
     return &m_res_storage;
+}
+
+void IkedControlFuzzer::err(int exit_code, const char *fmt, ...)
+{
+    char *freeMe(nullptr);
+    va_list args;
+    va_start (args, fmt);
+    vasprintf(&freeMe, fmt, args);
+    va_end (args);
+
+    std::string diagnostic(freeMe);
+    free(freeMe);
+
+    throw std::runtime_error(diagnostic);
 }
 
 /*

@@ -30,7 +30,7 @@ protected:
 
 protected:
     struct parse_result	m_res_storage;
-    static struct parse_result *parse(int argsc, char **argsv);
+    struct parse_result *parse(int argsc, char **argsv);
 };
 
 IkedControlFuzzer::IkedControlFuzzer()

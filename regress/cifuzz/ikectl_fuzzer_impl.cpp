@@ -21,10 +21,6 @@ struct IkedControlFuzzer
     IkedControlFuzzer();
     ~IkedControlFuzzer();
 
-    static void err(int exit_code, const char *fmt, ...);
-    static int  connectHelper(const char *sock, struct parse_result *res);
-    static void reconnectHelper(const char *sock, struct parse_result *res, int ctl_sock, struct sockaddr_un &s_un);
-
 protected:
     struct parse_result	*res;
     int ctl_sock;
@@ -32,11 +28,15 @@ protected:
 protected:
     struct parse_result	m_res_storage;
     struct parse_result *parse(int argsc, char **argsv);
+
+    void err(int exit_code, const char *fmt, ...);
+    int  connectHelper(const char *sock, struct parse_result *res);
+    void reconnectHelper(const char *sock, struct parse_result *res, int ctl_sock, struct sockaddr_un &s_un);
 };
 
 IkedControlFuzzer::IkedControlFuzzer()
     : res(parse(0, NULL))
-    , ctl_sock(connectHelper())
+    , ctl_sock(connectHelper(IKED_SOCKET, res))
 {
 }
 
@@ -81,7 +81,7 @@ void IkedControlFuzzer::reconnectHelper(const char *sock, struct parse_result *r
 		if ( res->action == MONITOR &&
 		    (errno == ENOENT || errno == ECONNREFUSED)) {
 			usleep(100);
-			reconnectHelper(ctl_sock, s_un);
+			reconnectHelper(sock, res, ctl_sock, s_un);
 		}
 		err(1, "connect: %s", sock);
 	}

@@ -62,6 +62,7 @@ AddFuzzTarget(
         compat
 )
 
+find_package(ClangRTFuzzer REQUIRED)
 AddFuzzTarget(
     TARGET_NAME
         ikectl_fuzzer
@@ -72,5 +73,6 @@ AddFuzzTarget(
         CIFuzzTestHelpers
         iked-shared
         compat
+	unofficial::clang_rt::fuzzer
     FUZZER_NO_MAIN
 )

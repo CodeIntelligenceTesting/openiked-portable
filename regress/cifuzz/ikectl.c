@@ -38,8 +38,8 @@ void *fuzzerThreadMain(void *)
 {
     printf("%s:%d: Fuzzer thread spawned.\n", __FILE__, __LINE__);
 
-    int argsc = 3;
-    char **argsv = (char **)calloc(sizeof(char *), argsc);
+    int argsc = 2;
+    char **argsv = (char **)calloc(sizeof(char *), argsc+1);
     argsv[0] = "fuzzer";
     argsv[1] = "-runs=1";
     argsv[2] = NULL;

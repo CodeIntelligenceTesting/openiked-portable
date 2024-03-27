@@ -85,6 +85,8 @@ int IkedControlFuzzer::connectHelper(const char *sock, struct parse_result *res)
 	strlcpy(s_un.sun_path, sock, sizeof(s_un.sun_path));
 
     reconnectHelper(sock, res, ctl_sock, s_un);
+
+    return ctl_sock;
 }
 
 /*

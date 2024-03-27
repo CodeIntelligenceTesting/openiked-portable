@@ -15,26 +15,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "../../ikectl/parser.h"
-#include "../../iked/types.h"
-
-struct IkedControlFuzzer
-{
-    IkedControlFuzzer();
-    ~IkedControlFuzzer();
-
-protected:
-    struct parse_result	*res;
-    int ctl_sock;
-
-protected:
-    struct parse_result	m_res_storage;
-    struct parse_result *parse(int argsc, char **argsv);
-
-    void err(int exit_code, const char *fmt, ...);
-    int  connectHelper(const char *sock, struct parse_result *res);
-    void reconnectHelper(const char *sock, struct parse_result *res, int ctl_sock, struct sockaddr_un &s_un);
-};
+#include "ikectl_fuzzer_impl.hpp"
 
 IkedControlFuzzer::IkedControlFuzzer()
     : res(parse(0, NULL))

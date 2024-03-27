@@ -23,6 +23,12 @@ IkedControlFuzzer::IkedControlFuzzer()
 {
 }
 
+IkedControlFuzzer::~IkedControlFuzzer()
+{
+    close(ctl_sock);
+    ctl_sock = -1;
+}
+
 /*
  * stub
  */

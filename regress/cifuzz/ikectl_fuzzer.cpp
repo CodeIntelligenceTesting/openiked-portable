@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "ikectl_fuzzer_impl.hpp"
+
 void blockSignals()
 {
     sigset_t set;

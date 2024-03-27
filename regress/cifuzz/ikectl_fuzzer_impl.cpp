@@ -4,6 +4,7 @@
 #include <sys/un.h>
 #include <sys/tree.h>
 
+#include <errno.h>
 #include <unistd.h>
 
 #include <cstdarg>

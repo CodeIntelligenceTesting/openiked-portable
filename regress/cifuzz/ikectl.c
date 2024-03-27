@@ -5,6 +5,7 @@
 #include <signal.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 extern int main(int argsc, char **argsv);

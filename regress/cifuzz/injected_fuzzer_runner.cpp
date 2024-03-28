@@ -23,6 +23,8 @@ static int run_fuzzer()
     char **argsv;
 
     injected_fuzzer_main_arguments(&argsc, &argsv);
+    fflush(stdout);
+    fflush(stderr);
     return execv(argsv[0], argsv);
 }
 

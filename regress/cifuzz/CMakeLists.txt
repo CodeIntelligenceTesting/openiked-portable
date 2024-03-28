@@ -62,6 +62,7 @@ AddFuzzTarget(
         compat
 )
 
+find_package(nlohmann_json 3.2.0 REQUIRED)
 find_package(ClangRTFuzzer REQUIRED)
 AddFuzzTarget(
     TARGET_NAME
@@ -75,6 +76,7 @@ AddFuzzTarget(
         CIFuzzTestHelpers
         iked-shared
         compat
-	unofficial::clang_rt::fuzzer
+        unofficial::clang_rt::fuzzer
+        nlohmann_json::nlohmann_json
     FUZZER_NO_MAIN
 )

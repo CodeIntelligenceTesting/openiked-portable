@@ -17,7 +17,6 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t nmemb);
 
 static void setup() __attribute__ ((constructor));
 static void cleanup() __attribute__ ((destructor));
-static pthread_t g_fuzzer_thread;
 
 void *fuzzerThreadMain(void *)
 {
@@ -36,10 +35,11 @@ void *fuzzerThreadMain(void *)
 
 void setup()
 {
+    pthread_t fuzzer_thread;
     printf("%s:%d: Spawning fuzzer thread...\n", __FILE__, __LINE__);
-    int created = pthread_create(&g_fuzzer_thread, NULL, &fuzzerThreadMain, NULL);
+    int created = pthread_create(&fuzzer_thread, NULL, &fuzzerThreadMain, NULL);
     assert(created == 0);
-    int detached = pthread_detach(g_fuzzer_thread);
+    int detached = pthread_detach(fuzzer_thread);
     assert(detached == 0);
 }
 

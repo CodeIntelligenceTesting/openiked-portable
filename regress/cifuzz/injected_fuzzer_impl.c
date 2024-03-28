@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 #include "injected_fuzzer_arguments.h"
+#include "injected_fuzzer_impl.h"
 
 static void setup() __attribute__ ((constructor));
 static void cleanup() __attribute__ ((destructor));

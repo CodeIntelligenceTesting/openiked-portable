@@ -72,6 +72,11 @@ void injected_fuzzer_send_arguments(int argsc, char **argsv)
     std::fstream out("dump.json", std::fstream::out | std::fstream::trunc);
     // serialize JSON
     out << std::setw(2) << dump << '\n';
+
+    std::stringstream sstream;
+    sstream << std::setw(2) << dump << '\n';
+
+    printf("%s:%d: injected_fuzzer_send_arguments: %s", __FILE__, __LINE__, sstream.str().c_str());
 }
 
 void injected_fuzzer_free_arguments(int *_argsc, char ***_argsv)

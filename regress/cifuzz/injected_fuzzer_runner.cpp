@@ -12,6 +12,8 @@ int main(int _argsc, char **_argsv)
     for(int i=0; i<argsc; ++i) {
         printf("%d: %s\n", i, argsv[i]);
     }
+    injected_fuzzer_free_arguments(&argsc, &argsv);
+
 
     return 0;
 }

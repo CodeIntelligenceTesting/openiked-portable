@@ -8,6 +8,7 @@ extern void injected_fuzzer_send_arguments(int argsc, char **argsv);
 
 extern void injected_fuzzer_main_arguments(int *argsc, char ***argsv);
 extern void injected_fuzzer_recv_arguments(int *argsc, char ***argsv);
+extern int  injected_fuzzer_arguments_available();
 
 extern void injected_fuzzer_free_arguments(int *argsc, char ***argsv);
 

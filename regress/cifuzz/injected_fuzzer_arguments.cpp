@@ -26,31 +26,39 @@ static void populate_args_from_json(const nlohmann::json &args, int *_argsc, cha
     *_argsv = argsv;
 }
 
-void injected_fuzzer_recv_arguments(int *_argsc, char ***_argsv)
+nlohmann::json read_from_environment(const char *varname)
 {
-    char *envvar(getenv("CIFUZZ_INJECTED_FUZZER_ARGUMENTS"));
+    char *envvar(getenv(varname));
     assert(envvar != nullptr);
 
     std::stringstream in;
     in << envvar;
 
-    nlohmann::json args;
-    in >> args;
+    nlohmann::json json;
+    in >> json;
 
+    return json;
+}
+
+int injected_fuzzer_arguments_available()
+{
+    return (getenv("CIFUZZ_INJECTED_FUZZER_ARGUMENTS") != nullptr);
+}
+
+void injected_fuzzer_recv_arguments(int *_argsc, char ***_argsv)
+{
+    nlohmann::json args(read_from_environment("CIFUZZ_INJECTED_FUZZER_ARGUMENTS"));
     populate_args_from_json(args.at("libfuzzer"), _argsc, _argsv);
+    /*
+     * unset the environment variable to prevent it from getting inherited
+     */
+    int unsetenv_retval(unsetenv("CIFUZZ_INJECTED_FUZZER_ARGUMENTS"));
+    assert(unsetenv_retval == 0);
 }
 
 void injected_fuzzer_main_arguments(int *_argsc, char ***_argsv)
 {
-    char *envvar(getenv("CIFUZZ_INJECTED_FUZZER_ARGUMENTS"));
-    assert(envvar != nullptr);
-
-    std::stringstream in;
-    in << envvar;
-    
-    nlohmann::json args;
-    in >> args;
-
+    nlohmann::json args(read_from_environment("CIFUZZ_INJECTED_FUZZER_ARGUMENTS"));
     populate_args_from_json(args.at("main"), _argsc, _argsv);
 }
 

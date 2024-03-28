@@ -35,12 +35,16 @@ void *fuzzerThreadMain(void *)
 
 void setup()
 {
-    pthread_t fuzzer_thread;
-    printf("%s:%d: Spawning fuzzer thread...\n", __FILE__, __LINE__);
-    int created = pthread_create(&fuzzer_thread, NULL, &fuzzerThreadMain, NULL);
-    assert(created == 0);
-    int detached = pthread_detach(fuzzer_thread);
-    assert(detached == 0);
+    if (injected_fuzzer_arguments_available()) {
+        pthread_t fuzzer_thread;
+        printf("%s:%d: Spawning fuzzer thread on %d...\n", __FILE__, __LINE__, (int)getpid());
+        int created = pthread_create(&fuzzer_thread, NULL, &fuzzerThreadMain, NULL);
+        assert(created == 0);
+        int detached = pthread_detach(fuzzer_thread);
+        assert(detached == 0);
+    } else {
+        printf("%s:%d: No arguments available to %d, not spawning fuzzer thread.\n", __FILE__, __LINE__, (int)getpid());
+    }
 }
 
 void cleanup()

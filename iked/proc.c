@@ -554,8 +554,10 @@ proc_run(struct privsep *ps, struct privsep_proc *p,
 	else
 		root = pw->pw_dir;
 
-	if (chroot(root) == -1)
+	if (chroot(root) == -1) {
+		printf("root=%s\n", root);
 		fatal("%s: chroot", __func__);
+	}
 	if (chdir("/") == -1)
 		fatal("%s: chdir(\"/\")", __func__);
 

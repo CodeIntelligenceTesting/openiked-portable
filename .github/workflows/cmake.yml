@@ -31,13 +31,15 @@ jobs:
     steps:
     - name: Prepare ubuntu-22.04
       if: ${{ matrix.os == 'ubuntu-22.04' }}
-      run: echo "needed?"
+      run: |
+        pw group add _iked && pw user add -n _iked -G _iked || true
     
     - name: Prepare FreeBSD
       if: ${{ matrix.os == 'FreeBSD13' || matrix.os == 'FreeBSD14' }}
       run: |
         pkg install -y bash cmake curl git ninja pkgconf zip unzip
         pkg install -y autoconf autoconf-archive gmake
+        pw group add _iked && pw user add -n _iked -G _iked || true
 
     - name: Checkout Repository
       uses: actions/checkout@v4

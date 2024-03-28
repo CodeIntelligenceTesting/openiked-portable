@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "injected_fuzzer_arguments.hpp"
+
 extern int main(int argsc, char **argsv);
 extern int LLVMFuzzerRunDriver(int *argc, char ***argv,
                   int (*UserCb)(const uint8_t *Data, size_t Size));
@@ -22,13 +24,11 @@ void *fuzzerThreadMain(void *)
 {
     printf("%s:%d: Fuzzer thread spawned.\n", __FILE__, __LINE__);
 
-    int argsc = 2;
-    char **argsv = (char **)calloc(sizeof(char *), argsc+1);
-    argsv[0] = "fuzzer";
-    argsv[1] = "-runs=1";
-    argsv[2] = NULL;
+    int argsc;
+    char **argsv;
+    injected_fuzzer_recv_arguments(&argsc, &argsv);
     LLVMFuzzerRunDriver(&argsc, &argsv, &LLVMFuzzerTestOneInput);
-    free(argsv);
+    injected_fuzzer_free_arguments(&argsc, &argsv);
 
     return NULL;
 }

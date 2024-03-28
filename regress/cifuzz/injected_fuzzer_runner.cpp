@@ -1,19 +1,10 @@
 #include <stdio.h>
+#include <unistd.h>
 
 #include "injected_fuzzer_arguments.hpp"
 
-int main(int _argsc, char **_argsv)
+int main(int argsc, char **argsv)
 {
-    injected_fuzzer_send_arguments(_argsc, _argsv);
-
-    int argsc; char **argsv;
-    injected_fuzzer_recv_arguments(&argsc, &argsv);
-
-    for(int i=0; i<argsc; ++i) {
-        printf("%d: %s\n", i, argsv[i]);
-    }
-    injected_fuzzer_free_arguments(&argsc, &argsv);
-
-
-    return 0;
+    injected_fuzzer_send_arguments(argsc, argsv);
+    return exec(argsv[1], &argsv[1]);
 }

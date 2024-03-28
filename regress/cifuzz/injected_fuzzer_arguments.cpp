@@ -26,7 +26,7 @@ static void populate_args_from_json(const nlohmann::json &args, int *_argsc, cha
     *_argsv = argsv;
 }
 
-nlohmann::json read_from_environment(const char *varname)
+static nlohmann::json read_from_environment(const char *varname)
 {
     char *envvar(getenv(varname));
     assert(envvar != nullptr);

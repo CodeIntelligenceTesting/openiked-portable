@@ -34,6 +34,16 @@ void injected_fuzzer_recv_arguments(int *_argsc, char ***_argsv)
     populate_args_from_json(args.at("libfuzzer"), _argsc, _argsv);
 }
 
+void injected_fuzzer_main_arguments(int *_argsc, char ***_argsv)
+{
+    std::fstream in("dump.json", std::fstream::in);
+
+    nlohmann::json args;
+    in >> args;
+
+    populate_args_from_json(args.at("main"), _argsc, _argsv);
+}
+
 void injected_fuzzer_send_arguments(int argsc, char **argsv)
 {
     std::string arg0(argsv[1]);

@@ -33,8 +33,8 @@ jobs:
       if: ${{ matrix.os == 'ubuntu-22.04' }}
       run: echo "needed?"
     
-    - name: Prepare FreeBSD13
-      if: ${{ matrix.os == 'FreeBSD13' }}
+    - name: Prepare FreeBSD
+      if: ${{ matrix.os == 'FreeBSD13' || matrix.os == 'FreeBSD14' }}
       run: |
         pkg install -y bash cmake curl git ninja pkgconf zip unzip
         pkg install -y autoconf autoconf-archive gmake

@@ -46,7 +46,7 @@ void injected_fuzzer_send_arguments(int argsc, char **argsv)
     for (int i=2; i<argsc; ++i) {
         std::string argi(argsv[i]);
         if (!seen_dash_dash) {
-            if (argi.compare("==") == 0) {
+            if (argi.compare("--") == 0) {
                 seen_dash_dash = true;
                 continue;
             }

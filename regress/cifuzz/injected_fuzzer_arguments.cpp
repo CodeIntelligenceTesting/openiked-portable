@@ -42,7 +42,15 @@ static nlohmann::json read_from_environment(const char *varname)
 
 int injected_fuzzer_arguments_available()
 {
-    return (getenv("CIFUZZ_INJECTED_FUZZER_ARGUMENTS") != nullptr);
+    if (getenv("CIFUZZ_INJECTED_FUZZER_ARGUMENTS") != nullptr) {
+        int want_pid = read_from_environment("CIFUZZ_INJECTED_FUZZER_ARGUMENTS").at("pid");
+        if (want_pid == getpid()) {
+            return 1;
+        } else {
+            printf("%s:%d: Rejecting CIFUZZ_INJECTED_FUZZER_ARGUMENTS present on %d but payload is for %d\n", __FILE__, __LINE__, (int)getpid(), want_pid);
+        }
+    }
+    return 0;
 }
 
 void injected_fuzzer_recv_arguments(int *_argsc, char ***_argsv)
@@ -67,6 +75,7 @@ void injected_fuzzer_send_arguments(int argsc, char **argsv)
     std::string arg0(argsv[1]);
 
     nlohmann::json dump = nlohmann::json::object();
+    dump["pid"] = (int)getpid();
     dump["main"] = nlohmann::json::array({arg0});
     dump["libfuzzer"] = nlohmann::json::array({arg0});
 

@@ -6,5 +6,5 @@
 int main(int argsc, char **argsv)
 {
     injected_fuzzer_send_arguments(argsc, argsv);
-    return exec(argsv[1], &argsv[1]);
+    return execv(argsv[1], &argsv[1]);
 }

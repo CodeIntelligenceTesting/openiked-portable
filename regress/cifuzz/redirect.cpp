@@ -9,7 +9,7 @@ using json = nlohmann::json;
 
 void read()
 {
-    std::istream in("dump.json", std::fstream::in);
+    std::fstream in("dump.json", std::fstream::in);
 
     nlohmann::json args;
     in >> args;

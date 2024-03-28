@@ -86,5 +86,6 @@ AddFuzzTarget(
         CIFuzzArgumentRediction
         iked-shared
         compat
+        unofficial::clang_rt::fuzzer
     FUZZER_NO_MAIN
 )

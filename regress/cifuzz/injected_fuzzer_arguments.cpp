@@ -5,6 +5,8 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
+#include "injected_fuzzer_arguments.hpp"
+
 void injected_fuzzer_recv_arguments(int *_argsc, char ***_argsv)
 {
     std::fstream in("dump.json", std::fstream::in);

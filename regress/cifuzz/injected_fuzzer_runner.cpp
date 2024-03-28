@@ -1,4 +1,4 @@
-
+#include "injected_fuzzer_arguments.hpp"
 
 int main(int _argsc, char **_argsv)
 {

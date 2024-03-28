@@ -19,5 +19,5 @@ int main(int argsc, char **argsv)
 
     std::fstream out("dump.json", std::fstream::out | std::fstream::trunc);
     // serialize JSON
-    out << std::setw(2) << j << '\n';
+    out << std::setw(2) << args << '\n';
 }

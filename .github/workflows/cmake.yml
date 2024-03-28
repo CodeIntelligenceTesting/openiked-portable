@@ -24,7 +24,7 @@ jobs:
           - preset: gh-ubuntu-22.04-llvm15-debug
             os: ubuntu-22.04
           - preset: ci-x64-freebsd-debug
-            os: FreeBSD13
+            os: FreeBSD14
     
     name: ${{ matrix.preset }}
     runs-on: ${{ matrix.os }}

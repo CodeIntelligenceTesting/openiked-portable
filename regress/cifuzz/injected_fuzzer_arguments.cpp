@@ -1,3 +1,5 @@
+#include <unistd.h>
+
 #include <cstdlib>
 
 #include <fstream>
@@ -26,7 +28,11 @@ static void populate_args_from_json(const nlohmann::json &args, int *_argsc, cha
 
 void injected_fuzzer_recv_arguments(int *_argsc, char ***_argsv)
 {
-    std::fstream in("dump.json", std::fstream::in);
+    char *envvar(getenv("CIFUZZ_INJECTED_FUZZER_ARGUMENTS"));
+    assert(envvar != nullptr);
+
+    std::stringstream in;
+    in << envvar;
 
     nlohmann::json args;
     in >> args;
@@ -36,8 +42,12 @@ void injected_fuzzer_recv_arguments(int *_argsc, char ***_argsv)
 
 void injected_fuzzer_main_arguments(int *_argsc, char ***_argsv)
 {
-    std::fstream in("dump.json", std::fstream::in);
+    char *envvar(getenv("CIFUZZ_INJECTED_FUZZER_ARGUMENTS"));
+    assert(envvar != nullptr);
 
+    std::stringstream in;
+    in << envvar;
+    
     nlohmann::json args;
     in >> args;
 
@@ -68,15 +78,13 @@ void injected_fuzzer_send_arguments(int argsc, char **argsv)
             dump["libfuzzer"].push_back(argi);
         }
     }
-
-    std::fstream out("dump.json", std::fstream::out | std::fstream::trunc);
-    // serialize JSON
-    out << std::setw(2) << dump << '\n';
-
     std::stringstream sstream;
     sstream << std::setw(2) << dump << '\n';
 
-    printf("%s:%d: injected_fuzzer_send_arguments: %s", __FILE__, __LINE__, sstream.str().c_str());
+    int setenv_retval = setenv("CIFUZZ_INJECTED_FUZZER_ARGUMENTS", sstream.str().c_str(), 0);
+    assert(setenv_retval == 0);
+
+    printf("%s:%d: CIFUZZ_INJECTED_FUZZER_ARGUMENTS=%s\n", __FILE__, __LINE__, sstream.str().c_str());
 }
 
 void injected_fuzzer_free_arguments(int *_argsc, char ***_argsv)

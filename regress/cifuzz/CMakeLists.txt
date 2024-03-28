@@ -68,10 +68,12 @@ AddFuzzTarget(
     TARGET_NAME
         ikectl_fuzzer
     SOURCES
-        ikectl.c
-        ikectl_fuzzer.cpp
-        ikectl_fuzzer_impl.cpp
-        ${openiked_SOURCE_DIR}/iked/iked.c
+        injected_fuzzer_runner.cpp
+        injected_fuzzer_arguments.cpp
+        # ikectl.c
+        # ikectl_fuzzer.cpp
+        # ikectl_fuzzer_impl.cpp
+        # ${openiked_SOURCE_DIR}/iked/iked.c
     DEPENDENCIES
         CIFuzzTestHelpers
         iked-shared

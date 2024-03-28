@@ -5,9 +5,7 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
-
-void read()
+void injected_fuzzer_read_arguments(int *_argsc, char ***_argsv)
 {
     std::fstream in("dump.json", std::fstream::in);
 
@@ -23,12 +21,11 @@ void read()
     }
     argsv[argsc] = nullptr;
 
-    for(int i=0; i<argsc; ++i) {
-        printf("%d: %s\n", i, argsv[i]);
-    }
+    *_argsc = argsc;
+    *_argsv = argsv;
 }
 
-void write(int argsc, char **argsv)
+void injected_fuzzer_send_arguments(int argsc, char **argsv)
 {
     nlohmann::json args = nlohmann::json::array();
     for (int i=0; i!=argsc; ++i) {
@@ -38,10 +35,4 @@ void write(int argsc, char **argsv)
     std::fstream out("dump.json", std::fstream::out | std::fstream::trunc);
     // serialize JSON
     out << std::setw(2) << args << '\n';
-}
-
-int main(int argsc, char **argsv)
-{
-    write(argsc, argsv);
-    read();
 }

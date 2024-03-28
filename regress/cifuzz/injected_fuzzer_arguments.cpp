@@ -9,7 +9,7 @@
 
 #include "injected_fuzzer_arguments.hpp"
 
-static void populate_args_from_json(const nlohmann::json::array &args, int *_argsc, char ***_argsv)
+static void populate_args_from_json(const nlohmann::json &args, int *_argsc, char ***_argsv)
 {
     int    argsc = args.size();
     char **argsv = new char* [argsc+1];
@@ -34,11 +34,11 @@ void injected_fuzzer_recv_arguments(int *_argsc, char ***_argsv)
     populate_args_from_json(args.at("libfuzzer"), _argsc, _argsv);
 }
 
-int injected_fuzzer_send_arguments(int argsc, char **argsv)
+void injected_fuzzer_send_arguments(int argsc, char **argsv)
 {
     std::string arg0(argsv[1]);
 
-    nloahman::json dump = nlohmann::json::object();
+    nlohmann::json dump = nlohmann::json::object();
     dump["main"] = nlohmann::json::array({arg0});
     dump["libfuzzer"] = nlohmann::json::array({arg0});
 
@@ -62,8 +62,6 @@ int injected_fuzzer_send_arguments(int argsc, char **argsv)
     std::fstream out("dump.json", std::fstream::out | std::fstream::trunc);
     // serialize JSON
     out << std::setw(2) << args << '\n';
-
-    return main_args_index;
 }
 
 void injected_fuzzer_free_arguments(int *_argsc, char ***_argsv)

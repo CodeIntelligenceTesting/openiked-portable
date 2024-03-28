@@ -9,7 +9,7 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
-#include "injected_fuzzer_arguments.hpp"
+#include "injected_fuzzer_arguments.h"
 
 static void populate_args_from_json(const nlohmann::json &args, int *_argsc, char ***_argsv)
 {

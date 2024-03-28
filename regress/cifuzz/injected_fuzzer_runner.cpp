@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "injected_fuzzer_arguments.hpp"
+#include "injected_fuzzer_arguments.h"
 
 static int usage(const char *args0)
 {

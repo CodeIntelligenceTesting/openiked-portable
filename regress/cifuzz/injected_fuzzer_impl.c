@@ -8,14 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "injected_fuzzer_arguments.hpp"
-
-extern int main(int argsc, char **argsv);
-extern int LLVMFuzzerRunDriver(int *argc, char ***argv,
-                  int (*UserCb)(const uint8_t *Data, size_t Size));
-
-int LLVMFuzzerInitialize(int *argc, char ***argv);
-int LLVMFuzzerTestOneInput(const uint8_t *data, size_t nmemb);
+#include "injected_fuzzer_arguments.h"
 
 static void setup() __attribute__ ((constructor));
 static void cleanup() __attribute__ ((destructor));

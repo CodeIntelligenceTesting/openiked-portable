@@ -2,6 +2,7 @@
   "name": "openiked-portable",
   "version-string": "7.3.9999",
   "dependencies": [
+    "libarchive",
     "libevent",
     "nlohmann-json",
     {

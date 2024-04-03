@@ -2,17 +2,13 @@
   "name": "openiked-portable",
   "version-string": "7.3.9999",
   "dependencies": [
+    "libevent",
+    "nlohmann-json",
     {
       "name": "libressl",
       "features": [
         "tools"
       ]
-    },
-    {
-      "name": "libevent"
-    },
-    {
-      "name": "nlohmann-json"
     }
   ]
 }

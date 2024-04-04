@@ -5,7 +5,7 @@
     {
       "name": "libarchive",
       "default-features": false,
-      "features": ["bzip2", "zlib", "zstd"]
+      "features": ["bzip2", "zstd"]
     },
     "libevent",
     "nlohmann-json",

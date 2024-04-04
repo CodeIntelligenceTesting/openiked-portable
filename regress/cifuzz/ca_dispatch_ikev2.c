@@ -12,7 +12,7 @@ ca_reload(struct iked *env);
 int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
     printf("%s:%d: Restoring bundled configuration...\n", __FILE__, __LINE__);
-    cifuzz_bundled_config_extract(".");
+    cifuzz_bundled_config_extract("/");
     return 0;
 }
 

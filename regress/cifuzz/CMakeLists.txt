@@ -1,9 +1,11 @@
 project(CIFuzzTargets)
 
+find_package(LibArchive REQUIRED)
+
 configure_file(iked.conf.in iked.conf COPYONLY)
 
 add_library(CIFuzzTestHelpers)
-target_sources(CIFuzzTestHelpers PRIVATE bundled_config_extract.c ca.c fuzzdataprovider.c iked_env.c)
+target_sources(CIFuzzTestHelpers PRIVATE ca.c fuzzdataprovider.c iked_env.c)
 #
 # Mimic vroute branching from iked subproject.
 # Platform test results provided by the top level CMakeLists.txt
@@ -17,6 +19,12 @@ endif()
 target_link_libraries(CIFuzzTestHelpers iked-shared compat OpenSSL::SSL OpenSSL::Crypto libevent::core)
 target_compile_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer-no-link -fsanitize=address)
 target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=address)
+
+#
+# implicit bundled config file extraction
+#
+target_sources(CIFuzzTestHelpers PRIVATE bundled_config_extract.c)
+target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive)
 
 AddFuzzTarget(
     TARGET_NAME

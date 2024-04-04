@@ -30,7 +30,7 @@ target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=address)
 find_package(LibArchive REQUIRED)
 find_package(ZLIB REQUIRED) 
 find_package(BZip2 REQUIRED)
-target_compile_definitions(CIFuzzTestHelpers PRIVATE CMAKE_INSTALL_SYSCONFDIR=${CMAKE_INSTALL_SYSCONFDIR})
+target_compile_definitions(CIFuzzTestHelpers PRIVATE CMAKE_INSTALL_SYSCONFDIR="${CMAKE_INSTALL_SYSCONFDIR}")
 target_sources(CIFuzzTestHelpers PRIVATE bundled_config_prefix.c bundled_config_extract.c)
 target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive ZLIB::ZLIB BZip2::BZip2)
 

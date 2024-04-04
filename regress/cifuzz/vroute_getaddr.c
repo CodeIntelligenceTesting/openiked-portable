@@ -7,9 +7,17 @@
 
 #include <event.h>
 
+#include "bundled_config_extract.h"
 #include "fuzzdataprovider.h"
 #include "iked.h"
 #include "iked_env.h"
+
+int LLVMFuzzerInitialize(int *argc, char ***argv)
+{
+    printf("%s:%d: Restoring bundled configuration...\n", __FILE__, __LINE__);
+    cifuzz_bundled_config_extract("/");
+    return 0;
+}
 
 int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
 {

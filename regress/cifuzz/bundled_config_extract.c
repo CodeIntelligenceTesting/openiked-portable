@@ -28,7 +28,7 @@ int cifuzz_bundled_config_extract(const char *prefix)
 
         a = archive_read_new();
         ext = archive_write_disk_new();
-        f = ARCHIVE_EXTRACT_TIME | ARCHIVE_EXTRACT_PERM /* | ARCHIVE_EXTRACT_ACL | ARCHIVE_EXTRACT_FFLAGS */;
+        flags = ARCHIVE_EXTRACT_TIME | ARCHIVE_EXTRACT_PERM /* | ARCHIVE_EXTRACT_ACL | ARCHIVE_EXTRACT_FFLAGS */;
         archive_write_disk_set_options(ext, flags);
         /*
          * Note: archive_write_disk_set_standard_lookup() is useful

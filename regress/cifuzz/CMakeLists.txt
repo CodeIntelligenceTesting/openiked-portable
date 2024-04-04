@@ -19,13 +19,19 @@ target_compile_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer-no-link -fsani
 target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=address)
 
 #
-# implicit bundled config file extraction
-# libarchive not refrencing its deep-endencies?
+# implicit bundled config file extraction.
+# We need to pass CMAKE_INSTALL_SYSCONFDIR into the source here,
+# because the location config files are expected by iked is
+# hard-coded but varying depending on the branch taken in
+# https://github.com/openiked/openiked-portable/blob/6d5b015f50301ffb1800f36f636b953a714c9e62/CMakeLists.txt#L47
+# 
+# Also, libarchive seems not to be refrencing its deep-endencies [...]
 #
 find_package(LibArchive REQUIRED)
 find_package(ZLIB REQUIRED) 
 find_package(BZip2 REQUIRED)
-target_sources(CIFuzzTestHelpers PRIVATE bundled_config_extract.c)
+target_compile_definitions(CIFuzzTestHelpers PRIVATE CMAKE_INSTALL_SYSCONFDIR=${CMAKE_INSTALL_SYSCONFDIR})
+target_sources(CIFuzzTestHelpers PRIVATE bundled_config_prefix.c bundled_config_extract.c)
 target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive ZLIB::ZLIB BZip2::BZip2)
 
 AddFuzzTarget(

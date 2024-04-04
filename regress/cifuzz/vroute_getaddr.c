@@ -8,6 +8,7 @@
 #include <event.h>
 
 #include "bundled_config_extract.h"
+#include "bundled_config_prefix.h"
 #include "fuzzdataprovider.h"
 #include "iked.h"
 #include "iked_env.h"
@@ -15,7 +16,7 @@
 int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
     printf("%s:%d: Restoring bundled configuration...\n", __FILE__, __LINE__);
-    cifuzz_bundled_config_extract("/");
+    cifuzz_bundled_config_extract(bundled_config_prefix());
     return 0;
 }
 

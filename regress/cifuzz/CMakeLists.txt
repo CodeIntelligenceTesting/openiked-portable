@@ -1,7 +1,5 @@
 project(CIFuzzTargets)
 
-find_package(LibArchive REQUIRED)
-
 configure_file(iked.conf.in iked.conf COPYONLY)
 
 add_library(CIFuzzTestHelpers)
@@ -22,9 +20,13 @@ target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=address)
 
 #
 # implicit bundled config file extraction
+# libarchive not refrencing its deep-endencies?
 #
+find_package(LibArchive REQUIRED)
+find_package(ZLIB REQUIRED) 
+find_package(BZip2 REQUIRED)
 target_sources(CIFuzzTestHelpers PRIVATE bundled_config_extract.c)
-target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive)
+target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive ZLIB::ZLIB BZip2::BZip2)
 
 AddFuzzTarget(
     TARGET_NAME

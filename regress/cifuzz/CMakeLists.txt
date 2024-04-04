@@ -16,7 +16,7 @@ endif()
 if(HAVE_VROUTE_NETLINK)
 	target_sources(CIFuzzTestHelpers PRIVATE vroute_cleanup_leaked_sockets-netlink.c)
 endif()
-target_link_libraries(CIFuzzTestHelpers iked-shared compat OpenSSL::SSL OpenSSL::Crypto libevent::core)
+target_link_libraries(CIFuzzTestHelpers PUBLIC iked-shared compat OpenSSL::SSL OpenSSL::Crypto libevent::core)
 target_compile_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer-no-link -fsanitize=address)
 target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=address)
 

@@ -75,6 +75,17 @@ AddFuzzTarget(
 
 AddFuzzTarget(
     TARGET_NAME
+        ikev2_dispatch_parent_fuzzer
+    SOURCES
+        ikev2_dispatch_parent_fuzzer.c
+    DEPENDENCIES
+        CIFuzzTestHelpers
+        iked-shared
+        compat
+)
+
+AddFuzzTarget(
+    TARGET_NAME
         ca_dispatch_ikev2_fuzzer
     SOURCES
         ca_dispatch_ikev2_fuzzer.c

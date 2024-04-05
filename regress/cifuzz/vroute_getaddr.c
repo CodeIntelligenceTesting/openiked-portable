@@ -7,6 +7,7 @@
 
 #include <event.h>
 
+#include "bundled_config_embedded_blob.h"
 #include "bundled_config_extract.h"
 #include "bundled_config_prefix.h"
 #include "fuzzdataprovider.h"
@@ -16,7 +17,11 @@
 int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
     printf("%s:%d: Restoring bundled configuration...\n", __FILE__, __LINE__);
-    cifuzz_bundled_config_extract(cifuzz_bundled_config_prefix());
+    cifuzz_bundled_config_extract(
+        cifuzz_bundled_config_prefix(),
+        cifuzz_bundled_config_embedded_blob(),
+        cifuzz_bundled_config_embedded_blob_size()
+    );
     return 0;
 }
 

@@ -64,9 +64,9 @@ AddFuzzTarget(
 
 AddFuzzTarget(
     TARGET_NAME
-        ikev2_dispatch_control
+        ikev2_dispatch_control_fuzzer
     SOURCES
-        ikev2_dispatch_control.c
+        ikev2_dispatch_control_fuzzer.c
     DEPENDENCIES
         CIFuzzTestHelpers
         iked-shared

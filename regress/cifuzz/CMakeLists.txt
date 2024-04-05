@@ -53,6 +53,17 @@ target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive ZLIB::ZLIB
 
 AddFuzzTarget(
     TARGET_NAME
+        ca_dispatch_ikev2_fuzzer
+    SOURCES
+        ca_dispatch_ikev2_fuzzer.c
+    DEPENDENCIES
+        CIFuzzTestHelpers
+        iked-shared
+        compat
+)
+
+AddFuzzTarget(
+    TARGET_NAME
         ikev2_dispatch_cert_fuzzer
     SOURCES
         ikev2_dispatch_cert_fuzzer.c
@@ -78,17 +89,6 @@ AddFuzzTarget(
         ikev2_dispatch_parent_fuzzer
     SOURCES
         ikev2_dispatch_parent_fuzzer.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        iked-shared
-        compat
-)
-
-AddFuzzTarget(
-    TARGET_NAME
-        ca_dispatch_ikev2_fuzzer
-    SOURCES
-        ca_dispatch_ikev2_fuzzer.c
     DEPENDENCIES
         CIFuzzTestHelpers
         iked-shared

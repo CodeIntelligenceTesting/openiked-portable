@@ -20,6 +20,22 @@ target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=address)
 
 #
 # implicit bundled config file extraction.
+#
+
+file(READ bundled_config.tar.gz content HEX)
+string(REGEX MATCHALL "([A-Fa-f0-9][A-Fa-f0-9])" SEPARATED_HEX ${content})
+set(file_content_as_c_array "")
+set(index 0)
+foreach (hex IN LISTS SEPARATED_HEX)
+	string(APPEND file_content_as_c_array "0x${hex},")
+    math(EXPR index "${index}+1")
+    if (index GREATER 16)
+        string(APPEND file_content_as_c_array "\n    ")
+        set(index 0)
+    endif ()
+endforeach ()
+configure_file(bundled_config_embedded_blob.c.in bundled_config_embedded_blob.c @ONLY)
+
 # We need to pass CMAKE_INSTALL_SYSCONFDIR into the source here,
 # because the location config files are expected by iked is
 # hard-coded but varying depending on the branch taken in
@@ -31,7 +47,8 @@ find_package(LibArchive REQUIRED)
 find_package(ZLIB REQUIRED) 
 find_package(BZip2 REQUIRED)
 target_compile_definitions(CIFuzzTestHelpers PRIVATE CMAKE_INSTALL_SYSCONFDIR="${CMAKE_INSTALL_SYSCONFDIR}")
-target_sources(CIFuzzTestHelpers PRIVATE bundled_config_prefix.c bundled_config_extract.c)
+target_include_directories(CIFuzzTestHelpers PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_sources(CIFuzzTestHelpers PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/bundled_config_embedded_blob.c bundled_config_prefix.c bundled_config_extract.c)
 target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive ZLIB::ZLIB BZip2::BZip2)
 
 AddFuzzTarget(

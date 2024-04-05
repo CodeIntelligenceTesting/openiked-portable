@@ -178,18 +178,6 @@ struct iked *create_iked_env()
     vroute_init(env);
 #endif
 
-    strcpy(env->sc_conffile, "iked.conf");
-    /*
-     * might have to stub parent_configure
-     */
-    /*
-     * Need to drop non-owner read bits
-     * https://github.com/openiked/openiked-portable/blob/a0fc2e0d629a081b170adabc8d092653b07f1d4a/iked/parse.y#L1713
-     */
-    int mode = chmod(env->sc_conffile, S_IRUSR);
-    assert(mode == 0);
-
-
 #if 0
     if (parent_configure(env) == -1)
         fatalx("configuration failed");

@@ -123,8 +123,8 @@ int cifuzz_check_message_payload(struct imsg *imsg)
 		return EXIT_FAILURE;
 
 	case IMSG_PFKEY_SOCKET:
-        /* any payload */
-		return EXIT_SUCCESS;
+        /* any payload but runs ipsec code, so skip it */
+		return EXIT_FAILURE;
 
 	case IMSG_CFG_POLICY:
         /* needs a valid iked_policy. Skip for now. */

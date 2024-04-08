@@ -87,8 +87,7 @@ static void clamp_if_larger(uint32_t *length, uint32_t maximal_allowed_length)
 {
     if (*length >= maximal_allowed_length) {
         *length = maximal_allowed_length;    
-    }
-    return EXIT_SUCCESS;  
+    } 
 }
 
 static int fail_if_smaller(uint32_t *length, uint32_t minimal_required_length)
@@ -106,8 +105,8 @@ int cifuzz_check_message_payload(void *payload, int type, uint32_t *length)
 
     switch (type) {
 	case IMSG_CTL_RESET:
-        clamp_if_larger(length, sizeof(blob.ctl_reset);
-        return fail_if_smaller(length), sizeof(blob.ctl_reset));
+        clamp_if_larger(length, sizeof(blob->ctl_reset);
+        return fail_if_smaller(length), sizeof(blob->ctl_reset));
 
 	case IMSG_CTL_COUPLE:
 	case IMSG_CTL_DECOUPLE:
@@ -132,12 +131,12 @@ int cifuzz_check_message_payload(void *payload, int type, uint32_t *length)
 		return EXIT_FAILURE;
     
 	case IMSG_CFG_FLOW:
-		clamp_if_larger(length, sizeof(blob.cfg_flow));
-        return fail_if_smaller(length, sizeof(blob.cfg_flow));
+		clamp_if_larger(length, sizeof(blob->cfg_flow));
+        return fail_if_smaller(length, sizeof(blob->cfg_flow));
 
 	case IMSG_CFG_USER:
-		clamp_if_larger(length, sizeof(blob.cfg_user));
-        if (fail_if_smaller(length, sizeof(blob.cfg_user)) != EXIT_SUCCESS) {
+		clamp_if_larger(length, sizeof(blob->cfg_user));
+        if (fail_if_smaller(length, sizeof(blob->cfg_user)) != EXIT_SUCCESS) {
             return EXIT_FAILURE;
         }
         blob->cfg_user.usr_name[sizeof(blob->cfg_user.usr_name)-1] = '\0';
@@ -148,10 +147,10 @@ int cifuzz_check_message_payload(void *payload, int type, uint32_t *length)
 		return (EXIT_SUCCESS);
 
 	case IMSG_CTL_STATIC:
-		return fail_if_smaller(length, sizeof(blob.ctl_static));
+		return fail_if_smaller(length, sizeof(blob->ctl_static));
 
 	case IMSG_CERT_PARTIAL_CHAIN:
-		return fail_if_smaller(length, sizeof(blob.cert_partial_chain));
+		return fail_if_smaller(length, sizeof(blob->cert_partial_chain));
 
 	default:
 		return EXIT_SUCCESS;

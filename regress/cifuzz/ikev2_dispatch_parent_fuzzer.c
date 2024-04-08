@@ -105,8 +105,8 @@ int cifuzz_check_message_payload(void *payload, int type, uint32_t *length)
 
     switch (type) {
 	case IMSG_CTL_RESET:
-        clamp_if_larger(length, sizeof(blob->ctl_reset);
-        return fail_if_smaller(length), sizeof(blob->ctl_reset));
+        clamp_if_larger(length, sizeof(blob->ctl_reset));
+        return fail_if_smaller(length, sizeof(blob->ctl_reset));
 
 	case IMSG_CTL_COUPLE:
 	case IMSG_CTL_DECOUPLE:

@@ -68,19 +68,19 @@ struct cifuzz_IMSG_CERT_PARTIAL_CHAIN_payload
 
 union cifuzz_IMGS_payload
 {
-    cifuzz_IMSG_CTL_RESET_payload ctl_reset;
-    cifuzz_IMSG_CTL_COUPLE_payload ctl_couple;
-    cifuzz_IMSG_CTL_COUPLE_payload ctl_decouple;
-    cifuzz_IMSG_CTL_ACTIVE_payload ctl_active; 
-    cifuzz_IMSG_CTL_ACTIVE_payload ctl_inactive;
-    cifuzz_IMSG_UDP_SOCKET_payload udp_socket; 
-    cifuzz_IMSG_PFKEY_SOCKET_payload pfkey_socket; 
-    cifuzz_IMSG_CFG_POLICY_payload cfg_policy; 
-    cifuzz_IMSG_CFG_FLOW_payload cfg_flow;
-    cifuzz_IMSG_CFG_USER_payload cfg_user;
-    cifuzz_IMSG_COMPILE_payload compile;
-    cifuzz_IMSG_CTL_STATIC_payload ctl_static;
-    cifuzz_IMSG_CERT_PARTIAL_CHAIN_payload cert_partial_chain;
+    struct cifuzz_IMSG_CTL_RESET_payload ctl_reset;
+    struct cifuzz_IMSG_CTL_COUPLE_payload ctl_couple;
+    struct cifuzz_IMSG_CTL_COUPLE_payload ctl_decouple;
+    struct cifuzz_IMSG_CTL_ACTIVE_payload ctl_active; 
+    struct cifuzz_IMSG_CTL_ACTIVE_payload ctl_inactive;
+    struct cifuzz_IMSG_UDP_SOCKET_payload udp_socket; 
+    struct cifuzz_IMSG_PFKEY_SOCKET_payload pfkey_socket; 
+    struct cifuzz_IMSG_CFG_POLICY_payload cfg_policy; 
+    struct cifuzz_IMSG_CFG_FLOW_payload cfg_flow;
+    struct cifuzz_IMSG_CFG_USER_payload cfg_user;
+    struct cifuzz_IMSG_COMPILE_payload compile;
+    struct cifuzz_IMSG_CTL_STATIC_payload ctl_static;
+    struct cifuzz_IMSG_CERT_PARTIAL_CHAIN_payload cert_partial_chain;
 };
 
 char			 usr_name[LOGIN_NAME_MAX];

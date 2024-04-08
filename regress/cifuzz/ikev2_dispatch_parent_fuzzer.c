@@ -139,8 +139,8 @@ int cifuzz_check_message_payload(struct imsg *imsg)
         if (fail_if_smaller(imsg, sizeof(blob->cfg_user)) != EXIT_SUCCESS) {
             return EXIT_FAILURE;
         }
-        blob->cfg_user.usr_name[sizeof(blob->cfg_user.usr_name)-1] = '\0';
-        blob->cfg_user.usr_pass[sizeof(blob->cfg_user.usr_pass)-1] = '\0';
+        blob->cfg_user.usr.usr_name[sizeof(blob->cfg_user.usr.usr_name)-1] = '\0';
+        blob->cfg_user.usr.usr_pass[sizeof(blob->cfg_user.usr.usr_pass)-1] = '\0';
         return EXIT_SUCCESS;
 
 	case IMSG_COMPILE:

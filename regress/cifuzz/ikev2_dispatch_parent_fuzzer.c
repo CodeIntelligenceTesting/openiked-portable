@@ -83,30 +83,30 @@ union cifuzz_IMGS_payload
     struct cifuzz_IMSG_CERT_PARTIAL_CHAIN_payload cert_partial_chain;
 };
 
-static void clamp_if_larger(uint32_t *length, uint32_t maximal_allowed_length)
+static void clamp_if_larger(struct imsg *imsg, uint32_t max_payload_length)
 {
-    if (*length >= maximal_allowed_length) {
-        *length = maximal_allowed_length;    
+    if (imsg->hdr.len >= sizeof(struct imsg_hdr) + max_payload_length) {
+        imsg->hdr.len = sizeof(struct imsg_hdr) + max_payload_length;    
     } 
 }
 
-static int fail_if_smaller(uint32_t *length, uint32_t minimal_required_length)
+static int fail_if_smaller(struct imsg *imsg, uint32_t min_payload_length)
 {
-    if (*length >= sizeof(minimal_required_length)) {
+    if (imsg->hdr.len >= sizeof(struct imsg_hdr) + min_payload_length) {
         return EXIT_SUCCESS;
     } else {
         return EXIT_FAILURE;
     }
 }
 
-int cifuzz_check_message_payload(void *payload, int type, uint32_t *length)
+int cifuzz_check_message_payload(struct imsg *imsg)
 {
-    union cifuzz_IMGS_payload *blob = (union cifuzz_IMGS_payload*)payload;
+    union cifuzz_IMGS_payload *blob = (union cifuzz_IMGS_payload*)(imsg->data);
 
-    switch (type) {
+    switch (imsg->hdr.type) {
 	case IMSG_CTL_RESET:
-        clamp_if_larger(length, sizeof(blob->ctl_reset));
-        return fail_if_smaller(length, sizeof(blob->ctl_reset));
+        clamp_if_larger(imsg, sizeof(blob->ctl_reset));
+        return fail_if_smaller(imsg, sizeof(blob->ctl_reset));
 
 	case IMSG_CTL_COUPLE:
 	case IMSG_CTL_DECOUPLE:
@@ -131,12 +131,12 @@ int cifuzz_check_message_payload(void *payload, int type, uint32_t *length)
 		return EXIT_FAILURE;
     
 	case IMSG_CFG_FLOW:
-		clamp_if_larger(length, sizeof(blob->cfg_flow));
-        return fail_if_smaller(length, sizeof(blob->cfg_flow));
+		clamp_if_larger(imsg, sizeof(blob->cfg_flow));
+        return fail_if_smaller(imsg, sizeof(blob->cfg_flow));
 
 	case IMSG_CFG_USER:
-		clamp_if_larger(length, sizeof(blob->cfg_user));
-        if (fail_if_smaller(length, sizeof(blob->cfg_user)) != EXIT_SUCCESS) {
+		clamp_if_larger(imsg, sizeof(blob->cfg_user));
+        if (fail_if_smaller(imsg, sizeof(blob->cfg_user)) != EXIT_SUCCESS) {
             return EXIT_FAILURE;
         }
         blob->cfg_user.usr_name[sizeof(blob->cfg_user.usr_name)-1] = '\0';
@@ -147,10 +147,10 @@ int cifuzz_check_message_payload(void *payload, int type, uint32_t *length)
 		return (EXIT_SUCCESS);
 
 	case IMSG_CTL_STATIC:
-		return fail_if_smaller(length, sizeof(blob->ctl_static));
+		return fail_if_smaller(imsg, sizeof(blob->ctl_static));
 
 	case IMSG_CERT_PARTIAL_CHAIN:
-		return fail_if_smaller(length, sizeof(blob->cert_partial_chain));
+		return fail_if_smaller(imsg, sizeof(blob->cert_partial_chain));
 
 	default:
 		return EXIT_SUCCESS;
@@ -198,10 +198,10 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     size_t payload_length = FuzzDataBytesRemaining(&provider);
     uint8_t *payload = FuzzDataReadByteArray(&provider, payload_length);
 
-    if (cifuzz_check_message_payload(payload, imsg.hdr.type, &payload_length) == EXIT_SUCCESS) {
-        imsg.hdr.len += payload_length;
-        imsg.data = payload;
+    imsg.hdr.len += payload_length;
+    imsg.data = payload;
 
+    if (cifuzz_check_message_payload(&imsg) == EXIT_SUCCESS) {
         ikev2_dispatch_parent(-1, NULL, &imsg);
     }
     free(payload);

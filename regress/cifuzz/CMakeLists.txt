@@ -106,6 +106,17 @@ AddFuzzTarget(
 
 AddFuzzTarget(
     TARGET_NAME
+        oscp_connect_fuzzer
+    SOURCES
+        oscp_connect_fuzzer.c
+    DEPENDENCIES
+        CIFuzzTestHelpers
+        iked-shared
+        compat
+)
+
+AddFuzzTarget(
+    TARGET_NAME
         parse_config_fuzzer
     SOURCES
         parse_config_fuzzer.c

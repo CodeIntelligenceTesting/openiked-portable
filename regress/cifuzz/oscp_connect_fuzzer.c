@@ -8,6 +8,43 @@
 #include "iked.h"
 #include "iked_env.h"
 
+struct cifuzz_ocsp_connect_payload
+{
+    struct iked_sahdr sh;
+};
+
+union cifuzz_IMGS_payload
+{
+    struct cifuzz_ocsp_connect_payload oscp_connect;
+};
+
+static void clamp_if_larger(struct imsg *imsg, uint32_t max_payload_length)
+{
+    if (imsg->hdr.len >= sizeof(struct imsg_hdr) + max_payload_length) {
+        imsg->hdr.len = sizeof(struct imsg_hdr) + max_payload_length;    
+    } 
+}
+
+static int fail_if_smaller(struct imsg *imsg, uint32_t min_payload_length)
+{
+    if (imsg->hdr.len >= sizeof(struct imsg_hdr) + min_payload_length) {
+        return EXIT_SUCCESS;
+    } else {
+        return EXIT_FAILURE;
+    }
+}
+
+int cifuzz_check_message_payload(struct imsg *imsg)
+{
+    union cifuzz_IMGS_payload *blob = (union cifuzz_IMGS_payload*)(imsg->data);
+
+    switch (imsg->hdr.type) {
+	case IMSG_OCSP_FD:
+        return fail_if_smaller(imsg, sizeof(blob->oscp_connect));
+    }
+    return EXIT_FAILURE;
+}
+
 int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
     printf("%s:%d: Restoring bundled configuration...\n", __FILE__, __LINE__);
@@ -30,7 +67,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
 
     struct imsg imsg = {
         .hdr = {
-            .type = FuzzDataReadUint32(&provider),
+            .type = IMSG_OCSP_FD,
             .len = sizeof(struct imsg_hdr),
             .flags = FuzzDataReadUint16(&provider),
             .peerid = FuzzDataReadUint32(&provider),
@@ -46,7 +83,9 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     imsg.hdr.len += payload_length;
     imsg.data = payload;
 
-    ocsp_connect(env, &imsg);
+    if (cifuzz_check_message_payload(imsg) == EXIT_SUCCESS) {
+        ocsp_connect(env, &imsg);
+    }
 
     free(payload);
 

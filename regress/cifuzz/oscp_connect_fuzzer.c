@@ -3,6 +3,8 @@
 #include "bundled_config_embedded_blob.h"
 #include "bundled_config_extract.h"
 #include "bundled_config_prefix.h"
+#include "cifuzz_imsg_clamp_if_larger.h"
+#include "cifuzz_imsg_fail_if_smaller.h"
 #include "ca.h"
 #include "fuzzdataprovider.h"
 #include "iked.h"
@@ -18,29 +20,13 @@ union cifuzz_IMGS_payload
     struct cifuzz_ocsp_connect_payload oscp_connect;
 };
 
-static void clamp_if_larger(struct imsg *imsg, uint32_t max_payload_length)
-{
-    if (imsg->hdr.len >= sizeof(struct imsg_hdr) + max_payload_length) {
-        imsg->hdr.len = sizeof(struct imsg_hdr) + max_payload_length;    
-    } 
-}
-
-static int fail_if_smaller(struct imsg *imsg, uint32_t min_payload_length)
-{
-    if (imsg->hdr.len >= sizeof(struct imsg_hdr) + min_payload_length) {
-        return EXIT_SUCCESS;
-    } else {
-        return EXIT_FAILURE;
-    }
-}
-
 int cifuzz_check_message_payload(struct imsg *imsg)
 {
     union cifuzz_IMGS_payload *blob = (union cifuzz_IMGS_payload*)(imsg->data);
 
     switch (imsg->hdr.type) {
 	case IMSG_OCSP_FD:
-        return fail_if_smaller(imsg, sizeof(blob->oscp_connect));
+        return cifuzz_imsg_fail_if_smaller(imsg, sizeof(blob->oscp_connect));
     }
     return EXIT_FAILURE;
 }

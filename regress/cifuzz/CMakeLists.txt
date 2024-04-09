@@ -1,7 +1,11 @@
 project(CIFuzzTargets)
 
 add_library(CIFuzzTestHelpers)
-target_sources(CIFuzzTestHelpers PRIVATE ca.c fuzzdataprovider.c iked_env.c)
+target_sources(CIFuzzTestHelpers PRIVATE
+    ca.c
+    fuzzdataprovider.c
+    iked_env.c
+)
 #
 # Mimic vroute branching from iked subproject.
 # Platform test results provided by the top level CMakeLists.txt
@@ -15,6 +19,14 @@ endif()
 target_link_libraries(CIFuzzTestHelpers PUBLIC iked-shared compat OpenSSL::SSL OpenSSL::Crypto libevent::core)
 target_compile_options(CIFuzzTestHelpers PUBLIC -fsanitize=fuzzer-no-link -fsanitize=address)
 target_link_options(CIFuzzTestHelpers PUBLIC -fsanitize=address)
+
+#
+# Helper functions
+#
+target_sources(CIFuzzTestHelpers PRIVATE
+    cifuzz_imsg_clamp_if_larger.c
+    cifuzz_imsg_fail_if_smaller.c
+)
 
 #
 # implicit bundled config file extraction.
@@ -44,9 +56,13 @@ configure_file(bundled_config_embedded_blob.c.in bundled_config_embedded_blob.c 
 find_package(LibArchive REQUIRED)
 find_package(ZLIB REQUIRED) 
 find_package(BZip2 REQUIRED)
+target_sources(CIFuzzTestHelpers PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}/bundled_config_embedded_blob.c
+    bundled_config_prefix.c
+    bundled_config_extract.c
+)
 target_compile_definitions(CIFuzzTestHelpers PRIVATE CMAKE_INSTALL_SYSCONFDIR="${CMAKE_INSTALL_SYSCONFDIR}")
 target_include_directories(CIFuzzTestHelpers PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_sources(CIFuzzTestHelpers PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/bundled_config_embedded_blob.c bundled_config_prefix.c bundled_config_extract.c)
 target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive ZLIB::ZLIB BZip2::BZip2)
 
 AddFuzzTarget(

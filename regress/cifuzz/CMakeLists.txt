@@ -44,7 +44,7 @@ foreach (hex IN LISTS SEPARATED_HEX)
         set(index 0)
     endif ()
 endforeach ()
-configure_file(bundled_config_embedded_blob.c.in bundled_config_embedded_blob.c @ONLY)
+configure_file(cifuzz_bundled_config_embedded_blob.c.in cifuzz_bundled_config_embedded_blob.c @ONLY)
 
 # We need to pass CMAKE_INSTALL_SYSCONFDIR into the source here,
 # because the location config files are expected by iked is
@@ -57,9 +57,9 @@ find_package(LibArchive REQUIRED)
 find_package(ZLIB REQUIRED) 
 find_package(BZip2 REQUIRED)
 target_sources(CIFuzzTestHelpers PRIVATE
-    ${CMAKE_CURRENT_BINARY_DIR}/bundled_config_embedded_blob.c
-    bundled_config_prefix.c
-    bundled_config_extract.c
+    ${CMAKE_CURRENT_BINARY_DIR}/cifuzz_bundled_config_embedded_blob.c
+    cifuzz_bundled_config_prefix.c
+    cifuzz_bundled_config_extract.c
 )
 target_compile_definitions(CIFuzzTestHelpers PRIVATE CMAKE_INSTALL_SYSCONFDIR="${CMAKE_INSTALL_SYSCONFDIR}")
 target_include_directories(CIFuzzTestHelpers PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

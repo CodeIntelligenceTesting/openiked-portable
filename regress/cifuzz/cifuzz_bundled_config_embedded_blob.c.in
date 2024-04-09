@@ -1,4 +1,4 @@
-#include "bundled_config_embedded_blob.h"
+#include "cifuzz_bundled_config_embedded_blob.h"
 
 static const uint8_t __cifuzz_bundled_config_embedded_blob[] = {
     @file_content_as_c_array@

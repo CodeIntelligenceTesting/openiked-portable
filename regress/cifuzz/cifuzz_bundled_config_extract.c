@@ -6,7 +6,7 @@
 #include <archive.h>
 #include <archive_entry.h>
 
-#include "bundled_config_extract.h"
+#include "cifuzz_bundled_config_extract.h"
 
 static int copy_data(struct archive *ar, struct archive *aw);
 

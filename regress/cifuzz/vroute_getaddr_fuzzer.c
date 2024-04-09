@@ -7,9 +7,9 @@
 
 #include <event.h>
 
-#include "bundled_config_embedded_blob.h"
-#include "bundled_config_extract.h"
-#include "bundled_config_prefix.h"
+#include "cifuzz_bundled_config_embedded_blob.h"
+#include "cifuzz_bundled_config_extract.h"
+#include "cifuzz_bundled_config_prefix.h"
 #include "fuzzdataprovider.h"
 #include "iked.h"
 #include "iked_env.h"

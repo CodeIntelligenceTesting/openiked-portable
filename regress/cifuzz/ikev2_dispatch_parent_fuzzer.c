@@ -4,9 +4,9 @@
 
 #include <event.h> // used-by, but not included by <iked.h>
 
-#include "bundled_config_embedded_blob.h"
-#include "bundled_config_extract.h"
-#include "bundled_config_prefix.h"
+#include "cifuzz_bundled_config_embedded_blob.h"
+#include "cifuzz_bundled_config_extract.h"
+#include "cifuzz_bundled_config_prefix.h"
 #include "cifuzz_imsg_clamp_if_larger.h"
 #include "cifuzz_imsg_fail_if_smaller.h"
 #include "fuzzdataprovider.h"

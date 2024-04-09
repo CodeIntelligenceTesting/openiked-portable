@@ -83,7 +83,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     imsg.hdr.len += payload_length;
     imsg.data = payload;
 
-    if (cifuzz_check_message_payload(imsg) == EXIT_SUCCESS) {
+    if (cifuzz_check_message_payload(&imsg) == EXIT_SUCCESS) {
         ocsp_connect(env, &imsg);
     }
 

@@ -65,93 +65,20 @@ target_compile_definitions(CIFuzzTestHelpers PRIVATE CMAKE_INSTALL_SYSCONFDIR="$
 target_include_directories(CIFuzzTestHelpers PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive ZLIB::ZLIB BZip2::BZip2)
 
-AddFuzzTarget(
-    TARGET_NAME
-        ca_dispatch_control_fuzzer
-    SOURCES
-        ca_dispatch_control_fuzzer.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        iked-shared
-        compat
-)
 
-AddFuzzTarget(
-    TARGET_NAME
-        ca_dispatch_ikev2_fuzzer
-    SOURCES
-        ca_dispatch_ikev2_fuzzer.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        iked-shared
-        compat
+set(fuzzers
+    ca_dispatch_control_fuzzer
+    ca_dispatch_ikev2_fuzzer
+    ikev2_dispatch_cert_fuzzer
+    ikev2_dispatch_control_fuzzer
+    ikev2_dispatch_parent_fuzzer
+    oscp_connect_fuzzer
+    parse_config_fuzzer
+    vroute_getaddr_fuzzer
 )
-
-AddFuzzTarget(
-    TARGET_NAME
-        ikev2_dispatch_cert_fuzzer
-    SOURCES
-        ikev2_dispatch_cert_fuzzer.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        iked-shared
-        compat
-)
-
-AddFuzzTarget(
-    TARGET_NAME
-        ikev2_dispatch_control_fuzzer
-    SOURCES
-        ikev2_dispatch_control_fuzzer.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        iked-shared
-        compat
-)
-
-AddFuzzTarget(
-    TARGET_NAME
-        ikev2_dispatch_parent_fuzzer
-    SOURCES
-        ikev2_dispatch_parent_fuzzer.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        iked-shared
-        compat
-)
-
-AddFuzzTarget(
-    TARGET_NAME
-        oscp_connect_fuzzer
-    SOURCES
-        oscp_connect_fuzzer.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        iked-shared
-        compat
-)
-
-AddFuzzTarget(
-    TARGET_NAME
-        parse_config_fuzzer
-    SOURCES
-        parse_config_fuzzer.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        iked-shared
-        compat
-)
-
-AddFuzzTarget(
-    TARGET_NAME
-        vroute_getaddr_fuzzer
-    SOURCES
-        vroute_getaddr_fuzzer.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        iked-shared
-        compat
-)
+foreach(fuzzer IN LISTS fuzzers)
+    AddFuzzTarget(TARGET_NAME ${fuzzer} SOURCES ${fuzzer}.c DEPENDENCIES CIFuzzTestHelpers iked-shared compat)
+endforeach()
 
 find_package(nlohmann_json 3.2.0 REQUIRED)
 find_package(ClangRTFuzzer REQUIRED)

@@ -21,7 +21,7 @@ struct cifuzz_IMSG_CTL_RESET_payload
 struct cifuzz_IMSG_OCSP_FD_payload
 {
     struct iked_sahdr sh;
-}
+};
 
 struct cifuzz_IMSG_OCSP_CFG_payload
 {
@@ -79,9 +79,9 @@ int cifuzz_check_message_payload(struct imsg *imsg)
 
 /*
  * not exported symbol from
- *   https://github.com/openiked/openiked-portable/blob/6d5b015f50301ffb1800f36f636b953a714c9e62/iked/ikev2.c#L67
+ *   https://github.com/openiked/openiked-portable/blob/6d5b015f50301ffb1800f36f636b953a714c9e62/iked/ca.c#L87
  */
-extern int	 ikev2_dispatch_parent(int, struct privsep_proc *, struct imsg *);
+extern int	 ca_dispatch_parent(int, struct privsep_proc *, struct imsg *);
 
 int LLVMFuzzerInitialize(int *argc, char ***argv)
 {

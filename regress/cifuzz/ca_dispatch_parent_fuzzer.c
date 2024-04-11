@@ -47,7 +47,7 @@ union cifuzz_IMGS_payload
     struct cifuzz_IMSG_OCSP_CFG_payload ocsp_cfg;
     struct cifuzz_IMSG_PRIVKEY_payload privkey;
     struct cifuzz_IMSG_PRIVKEY_payload pubkey;
-    struct cifuzz_IMSG_CERT_PARTIAL_CHAIN cert_partial_chain;
+    struct cifuzz_IMSG_CERT_PARTIAL_CHAIN_payload cert_partial_chain;
 };
 
 int cifuzz_check_message_payload(struct imsg *imsg)

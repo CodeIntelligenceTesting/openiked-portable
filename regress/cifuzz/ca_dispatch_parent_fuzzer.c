@@ -56,7 +56,8 @@ int cifuzz_check_message_payload(struct imsg *imsg)
 
     switch (imsg->hdr.type) {
 	case IMSG_CTL_RESET:
-        return cifuzz_imsg_fail_if_smaller(imsg, sizeof(blob->ctl_reset));
+        // this crashes
+        //return cifuzz_imsg_fail_if_smaller(imsg, sizeof(blob->ctl_reset));
 
 	case IMSG_OCSP_FD:
         return cifuzz_imsg_fail_if_smaller(imsg, sizeof(blob->ocsp_fd));

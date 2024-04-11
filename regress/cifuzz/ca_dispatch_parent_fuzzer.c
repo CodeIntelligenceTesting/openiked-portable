@@ -15,7 +15,7 @@
 
 struct cifuzz_IMSG_CTL_RESET_payload
 {
-    /* no payload */
+    unsigned int mode;
 };
 
 struct cifuzz_IMSG_OCSP_FD_payload
@@ -56,8 +56,7 @@ int cifuzz_check_message_payload(struct imsg *imsg)
 
     switch (imsg->hdr.type) {
 	case IMSG_CTL_RESET:
-        /* no payload */
-        return EXIT_SUCCESS;
+        return cifuzz_imsg_fail_if_smaller(imsg, sizeof(blob->ctl_reset));
 
 	case IMSG_OCSP_FD:
         return cifuzz_imsg_fail_if_smaller(imsg, sizeof(blob->ocsp_fd));

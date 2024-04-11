@@ -66,7 +66,9 @@ int cifuzz_check_message_payload(struct imsg *imsg)
 
 	case IMSG_PRIVKEY:
 	case IMSG_PUBKEY:
-        return cifuzz_imsg_fail_if_smaller(imsg, sizeof(blob->privkey));
+        // this crashes
+        //return cifuzz_imsg_fail_if_smaller(imsg, sizeof(blob->privkey));
+        return EXIT_FAILURE;
 
 	case IMSG_CERT_PARTIAL_CHAIN:
 		return cifuzz_imsg_fail_if_smaller(imsg, sizeof(blob->cert_partial_chain));

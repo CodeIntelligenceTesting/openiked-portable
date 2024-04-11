@@ -69,6 +69,7 @@ target_link_libraries(CIFuzzTestHelpers PUBLIC LibArchive::LibArchive ZLIB::ZLIB
 set(fuzzers
     ca_dispatch_control_fuzzer
     ca_dispatch_ikev2_fuzzer
+    ca_dispatch_parent_fuzzer
     ikev2_dispatch_cert_fuzzer
     ikev2_dispatch_control_fuzzer
     ikev2_dispatch_parent_fuzzer

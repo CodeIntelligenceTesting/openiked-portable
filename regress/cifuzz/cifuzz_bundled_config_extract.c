@@ -51,6 +51,7 @@ int cifuzz_bundled_config_extract(const char *prefix, const uint8_t *blob, size_
                         r = archive_write_finish_entry(ext);
                         assert(r == ARCHIVE_OK);
                 }
+                free(prefixedFilename);
         }
         archive_read_close(a);
         archive_read_free(a);

@@ -1,0 +1,15 @@
+#include "cifuzz_bundled_config_embedded_blob.h"
+
+static const uint8_t __cifuzz_bundled_config_embedded_blob[] = {
+    @file_content_as_c_array@
+};
+
+const uint8_t *cifuzz_bundled_config_embedded_blob()
+{
+    return __cifuzz_bundled_config_embedded_blob;
+}
+
+size_t cifuzz_bundled_config_embedded_blob_size()
+{
+    return sizeof(__cifuzz_bundled_config_embedded_blob);
+}

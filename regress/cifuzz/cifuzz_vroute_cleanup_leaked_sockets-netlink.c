@@ -2,7 +2,7 @@
 
 #include <event.h>
 
-#include "vroute_cleanup_leaked_sockets.h"
+#include "cifuzz_vroute_cleanup_leaked_sockets.h"
 
 /*
  * structure definitions copy-pasted from
@@ -39,7 +39,7 @@ struct iked_vroute_sc {
 #endif
 };
 
-void vroute_cleanup_leaked_sockets(struct iked *env) {
+void cifuzz_vroute_cleanup_leaked_sockets(struct iked *env) {
   struct iked_vroute_sc *ivr = env->sc_vroute;
   
   /*

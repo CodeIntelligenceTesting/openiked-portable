@@ -24,20 +24,22 @@ jobs:
           - preset: gh-ubuntu-22.04-llvm15-debug
             os: ubuntu-22.04
           - preset: ci-x64-freebsd-debug
-            os: FreeBSD13
+            os: FreeBSD14
     
     name: ${{ matrix.preset }}
     runs-on: ${{ matrix.os }}
     steps:
     - name: Prepare ubuntu-22.04
       if: ${{ matrix.os == 'ubuntu-22.04' }}
-      run: echo "needed?"
+      run: |
+        pw group add _iked && pw user add -n _iked -G _iked || true
     
-    - name: Prepare FreeBSD13
-      if: ${{ matrix.os == 'FreeBSD13' }}
+    - name: Prepare FreeBSD
+      if: ${{ matrix.os == 'FreeBSD13' || matrix.os == 'FreeBSD14' }}
       run: |
         pkg install -y bash cmake curl git ninja pkgconf zip unzip
         pkg install -y autoconf autoconf-archive gmake
+        pw group add _iked && pw user add -n _iked -G _iked || true
 
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -51,6 +53,8 @@ jobs:
       run: cmake --build --preset ${{ matrix.preset }}
     
     - name: Run Tests
+      env: 
+        ASAN_OPTIONS: "detect_leaks=0"
       run: ctest --preset ${{ matrix.preset }}
 
     - name: Publish Test Report

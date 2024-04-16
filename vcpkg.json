@@ -3,13 +3,16 @@
   "version-string": "7.3.9999",
   "dependencies": [
     {
+      "name": "libarchive",
+      "default-features": false,
+      "features": ["bzip2", "zstd"]
+    },
+    "libevent",
+    {
       "name": "libressl",
       "features": [
         "tools"
       ]
-    },
-    {
-      "name": "libevent"
     }
   ]
 }

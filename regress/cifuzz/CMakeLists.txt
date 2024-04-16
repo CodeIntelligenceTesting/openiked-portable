@@ -35,7 +35,7 @@ target_sources(CIFuzzTestHelpers PRIVATE
 # implicit bundled config file extraction.
 #
 
-file(READ bundled_config.tar.gz content HEX)
+file(READ cifuzz_bundled_config.tar.gz content HEX)
 string(REGEX MATCHALL "([A-Fa-f0-9][A-Fa-f0-9])" SEPARATED_HEX ${content})
 set(file_content_as_c_array "")
 set(index 0)

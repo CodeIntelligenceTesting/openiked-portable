@@ -80,31 +80,3 @@ set(fuzzers
 foreach(fuzzer IN LISTS fuzzers)
     AddFuzzTarget(TARGET_NAME ${fuzzer} SOURCES ${fuzzer}.c DEPENDENCIES CIFuzzTestHelpers iked-shared compat)
 endforeach()
-
-find_package(nlohmann_json 3.2.0 REQUIRED)
-find_package(ClangRTFuzzer REQUIRED)
-
-add_library(CIFuzzArgumentRediction)
-target_sources(CIFuzzArgumentRediction PRIVATE injected_fuzzer_arguments.cpp)
-target_link_libraries(CIFuzzArgumentRediction PRIVATE nlohmann_json::nlohmann_json)
-
-add_executable(ikectl_fuzzer_runner)
-target_sources(ikectl_fuzzer_runner PRIVATE injected_fuzzer_runner.cpp)
-target_link_libraries(ikectl_fuzzer_runner PRIVATE CIFuzzArgumentRediction)
-
-AddFuzzTarget(
-    TARGET_NAME
-        ikectl_fuzzer
-    SOURCES
-        ikectl_fuzzer.cpp
-        ikectl_fuzzer_impl.cpp
-        injected_fuzzer_impl.c
-        ${openiked_SOURCE_DIR}/iked/iked.c
-    DEPENDENCIES
-        CIFuzzTestHelpers
-        CIFuzzArgumentRediction
-        iked-shared
-        compat
-        unofficial::clang_rt::fuzzer
-    FUZZER_NO_MAIN
-)

@@ -8,7 +8,6 @@
       "features": ["bzip2", "zstd"]
     },
     "libevent",
-    "nlohmann-json",
     {
       "name": "libressl",
       "features": [

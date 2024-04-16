@@ -8,7 +8,7 @@
 #include "ca.h"
 #include "fuzzdataprovider.h"
 #include "iked.h"
-#include "iked_env.h"
+#include "cifuzz_iked_env.h"
 
 struct cifuzz_ocsp_connect_payload
 {
@@ -47,9 +47,9 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     FuzzDataProvider provider = FuzzDataConstruct(__data, __size);
 
     /* need to set global variable */
-    struct iked *env = create_iked_env();
+    struct iked *env = cifuzz_create_iked_env();
     iked_env = env;
-    create_iked_env_aux(env);
+    cifuzz_create_iked_env_aux(env);
 
     struct imsg imsg = {
         .hdr = {
@@ -75,8 +75,8 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
 
     free(payload);
 
-    destroy_iked_env_aux(env);
-    destroy_iked_env(env);
+    cifuzz_destroy_iked_env_aux(env);
+    cifuzz_destroy_iked_env(env);
     iked_env = NULL;
 
     return 0;

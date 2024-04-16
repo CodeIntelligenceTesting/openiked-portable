@@ -13,4 +13,4 @@
  * CMake has this information, so have it compile different implementation
  * source files depending on whether we're netlink or not.
  **/
-void vroute_cleanup_leaked_sockets(struct iked *env);
+void cifuzz_vroute_cleanup_leaked_sockets(struct iked *env);

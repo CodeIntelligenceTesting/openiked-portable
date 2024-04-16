@@ -8,16 +8,16 @@
 
 #include "fuzzdataprovider.h"
 #include "iked.h"
-#include "iked_env.h"
+#include "cifuzz_iked_env.h"
 
 int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
 {
     FuzzDataProvider provider = FuzzDataConstruct(__data, __size);
 
     /* need to set global variable */
-    struct iked *env = create_iked_env();
+    struct iked *env = cifuzz_create_iked_env();
     iked_env = env;
-    create_iked_env_aux(env);
+    cifuzz_create_iked_env_aux(env);
 
 #if 0 /* asan panics in mktemp? */
     char *filename = mktemp("iked.conf.XXXXXX");
@@ -51,8 +51,8 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     int removed = remove(filename);
     assert(removed == 0);
 
-    destroy_iked_env_aux(env);
-    destroy_iked_env(env);
+    cifuzz_destroy_iked_env_aux(env);
+    cifuzz_destroy_iked_env(env);
     iked_env = NULL;
 
     return 0;

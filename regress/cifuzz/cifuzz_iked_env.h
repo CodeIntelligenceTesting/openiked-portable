@@ -4,6 +4,10 @@
 
 #include "iked.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * Allocate an iked structure as is done in https://github.com/openiked/openiked-portable/blob/6a36fe8f216aea8a2255b9a8b98a5b53a75eb60a/iked/iked.c#L194
  * but skip super user assertions, libevent setup and posix signal handler setup that requires procedures local to iked.c
@@ -28,3 +32,7 @@ void cifuzz_destroy_iked_env_aux(struct iked *env);
  * but do not invoke exit()
  */
 void cifuzz_destroy_iked_env(struct iked *env);
+
+#ifdef __cplusplus
+}
+#endif

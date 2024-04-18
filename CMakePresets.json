@@ -293,7 +293,7 @@
     {
       "name": "cifuzz (Coverage)",
       "displayName": "cifuzz (Coverage)",
-      "binaryDir": "${sourceDir}/.cifuzz-build/libfuzzer/coverage",
+      "binaryDir": "${sourceDir}/.cifuzz-build/libfuzzer/llvm_cov",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
         "CMAKE_C_COMPILER": "clang",

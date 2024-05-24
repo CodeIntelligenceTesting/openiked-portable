@@ -8,8 +8,9 @@
 #include "iked.h"
 #include "cifuzz_iked_env.h"
 
-extern int
-ca_reload(struct iked *env);
+#include "mocks/mocks.h"
+
+#include "fuzzer_utils/ca_utils.c"
 
 int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
@@ -19,18 +20,21 @@ int LLVMFuzzerInitialize(int *argc, char ***argv)
         cifuzz_bundled_config_embedded_blob(),
         cifuzz_bundled_config_embedded_blob_size()
     );
+
+    copy_all_files();
     return 0;
+
 }
 
 int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
 {
     FuzzDataProvider provider = FuzzDataConstruct(__data, __size);
 
-    /* need to set global variable */
     struct iked *env = cifuzz_create_iked_env();
     iked_env = env;
     cifuzz_create_iked_env_aux(env);
-
+    config_setkeys(env);
+    ca_reset(NULL);
     struct imsg imsg = {
         .hdr = {
             .type = FuzzDataReadUint32(&provider),
@@ -52,9 +56,9 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     ca_dispatch_ikev2(-1, NULL, &imsg);
 
     free(payload);
-
     cifuzz_destroy_iked_env_aux(env);
     cifuzz_destroy_iked_env(env);
+    event_base_free(NULL);
     iked_env = NULL;
 
     return 0;

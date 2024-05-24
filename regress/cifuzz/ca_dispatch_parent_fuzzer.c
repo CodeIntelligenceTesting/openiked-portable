@@ -12,6 +12,10 @@
 #include "fuzzdataprovider.h"
 #include "iked.h"
 #include "cifuzz_iked_env.h"
+#include "ca.h"
+#include "mocks/mocks.h"
+#include "fuzzer_utils/ca_utils.c"
+
 
 struct cifuzz_IMSG_CTL_RESET_payload
 {
@@ -93,6 +97,8 @@ int LLVMFuzzerInitialize(int *argc, char ***argv)
         cifuzz_bundled_config_embedded_blob(),
         cifuzz_bundled_config_embedded_blob_size()
     );
+
+    copy_all_files();
     return 0;
 }
 
@@ -104,6 +110,8 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
     struct iked *env = cifuzz_create_iked_env();
     iked_env = env;
     cifuzz_create_iked_env_aux(env);
+    config_setkeys(env);
+    ca_reset(NULL);
 
     struct imsg imsg = {
         .hdr = {
@@ -130,6 +138,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
 
     cifuzz_destroy_iked_env_aux(env);
     cifuzz_destroy_iked_env(env);
+    event_base_free(NULL);
     iked_env = NULL;
 
     return 0;

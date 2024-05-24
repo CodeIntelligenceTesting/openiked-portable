@@ -12,6 +12,7 @@
 #include "fuzzdataprovider.h"
 #include "iked.h"
 #include "cifuzz_iked_env.h"
+#include "mocks/mocks.h"
 
 struct cifuzz_IMSG_CTL_RESET_payload
 {
@@ -194,6 +195,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *__data, size_t __size)
 
     cifuzz_destroy_iked_env_aux(env);
     cifuzz_destroy_iked_env(env);
+    event_base_free(NULL);
     iked_env = NULL;
 
     return 0;

@@ -8,6 +8,7 @@ target_sources(CIFuzzTestHelpers PRIVATE
     cifuzz_create_iked_env.c
     cifuzz_destroy_iked_env_aux.c
     cifuzz_destroy_iked_env.c
+    fuzzer_utils/ca_utils.c
 )
 #
 # Mimic vroute branching from iked subproject.
@@ -80,6 +81,8 @@ set(fuzzers
     parse_config_fuzzer
     vroute_getaddr_fuzzer
 )
+
 foreach(fuzzer IN LISTS fuzzers)
-    AddFuzzTarget(TARGET_NAME ${fuzzer} SOURCES ${fuzzer}.c DEPENDENCIES CIFuzzTestHelpers iked-shared compat)
+    AddFuzzTarget(TARGET_NAME ${fuzzer} SOURCES ${fuzzer}.c  DEPENDENCIES CIFuzzTestHelpers iked-shared compat)
+    set_target_properties(${fuzzer} PROPERTIES LINK_FLAGS "-Wl,--wrap=config_setkeys -Wl,--wrap=event_add")
 endforeach()

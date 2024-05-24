@@ -143,7 +143,6 @@ struct iked *cifuzz_create_iked_env()
 
     ps->ps_noaction = 1;
     ps->ps_instance = 0;
-
     /*
      * skip all libevent invokations and signal setup
      */
@@ -153,9 +152,12 @@ struct iked *cifuzz_create_iked_env()
 
     setproctitle("parent");
     log_procinit("parent");
-
+#endif
+	// We want to call event_init to initialize the event base.
+	// leaving it uninitialized my cause SEGV
     event_init();
 
+#if 0
     signal_set(&ps->ps_evsigint, SIGINT, parent_sig_handler, ps);
     signal_set(&ps->ps_evsigterm, SIGTERM, parent_sig_handler, ps);
     signal_set(&ps->ps_evsigchld, SIGCHLD, parent_sig_handler, ps);

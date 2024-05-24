@@ -6,6 +6,7 @@
 #include "fuzzdataprovider.h"
 #include "iked.h"
 #include "cifuzz_iked_env.h"
+#include "mocks/mocks.h"
 
 /*
  * not exported symbol from
